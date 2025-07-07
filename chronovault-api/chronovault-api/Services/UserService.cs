@@ -4,6 +4,7 @@ using chronovault_api.Repositories.Interfaces;
 using chronovault_api.Services.Interfaces;
 using chronovault_api.DTOs.Request;
 using chronovault_api.DTOs.Response;
+using System.Runtime.CompilerServices;
 
 namespace chronovault_api.Services
 {
@@ -69,8 +70,6 @@ namespace chronovault_api.Services
             var credential = await _userCredentialRepository.GetByUserIdAsync(user.Id);
             if (credential == null) return false;
 
-            // Aqui você implementaria a verificação do hash da senha
-            // Por exemplo, usando BCrypt
             return BCrypt.Net.BCrypt.Verify(password, Convert.ToBase64String(credential.PasswordHash));
         }
 

@@ -1,6 +1,10 @@
 <nav class="navbar">
-  <a class="navbar__logo" href="/">Chronovault</a>
+  <a class="navbar__logo" routerLink="/">Chronovault</a>
   
+  <a class="navbar__button" routerLink="/login">
+    <mat-icon class="material-icons">person</mat-icon>
+  </a>
+
   <button class="navbar__button" (click)="toggleCart()" aria-label="Carrinho">
     <mat-icon class="material-icons">shopping_cart</mat-icon>
   </button>

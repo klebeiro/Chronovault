@@ -1,0 +1,68 @@
+<main>
+  <!-- Login -->
+  <div *ngIf="mode === 'login'">
+    <form class="login-form" (ngSubmit)="onSubmit()">
+      <h2>Bem vindo de volta!</h2>
+      <div class="login-form-inputs">
+        <input type="text" placeholder="Email" name="email" [(ngModel)]="form.email" class="form-input-width" />
+        <input type="password" placeholder="Senha" name="password" [(ngModel)]="form.password" class="form-input-width" />
+        
+        <a routerLink="/recover" id="recover-password">Esqueci minha senha</a>
+        
+        <div class="bottom-form">
+          <button type="submit" class="form-input-width">Entrar</button>
+          <p>Não tem uma conta? <a routerLink="/register">Cadastrar-se</a></p>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Registro -->
+  <div *ngIf="mode === 'register'">
+    <form class="login-form" (ngSubmit)="onSubmit()">
+      <h2>Informe os dados</h2>
+      <div class="login-form-inputs">
+        <input type="text" placeholder="Email" class="form-input-width" />
+        <input type="text" placeholder="Nome completo" class="form-input-width" />
+        <input type="password" placeholder="Senha" class="form-input-width" />
+        <input type="password" placeholder="Confirmar senha" class="form-input-width" />
+        
+        <div class="bottom-form">
+          <button type="submit" class="form-input-width">Cadastrar</button>
+          <p>Já possui conta? <a routerLink="/login">Entrar</a></p>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Recuperação -->
+  <div *ngIf="mode === 'recover'">
+    <form class="login-form" (ngSubmit)="onSubmit()">
+      <h2>Informe seu email</h2>
+      <div class="login-form-inputs">
+        <input type="text" placeholder="Email" class="form-input-width" />
+        
+        <div class="bottom-form">
+          <button type="submit" class="form-input-width">Confirmar</button>
+          <p>Já possui conta? <a routerLink="/login">Entrar</a></p>
+          <p>Não tem uma conta? <a routerLink="/register">Cadastrar-se</a></p>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Troca de senha -->
+  <div *ngIf="mode === 'change-password'">
+    <form class="login-form" (ngSubmit)="onSubmit()">
+      <h2>Informe a nova senha</h2>
+      <div class="login-form-inputs">
+        <input type="password" placeholder="Nova senha" class="form-input-width" />
+        <input type="password" placeholder="Confirmar senha" class="form-input-width" />
+        
+        <div class="bottom-form">
+          <button type="submit" class="form-input-width">Alterar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</main>

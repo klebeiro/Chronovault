@@ -72,7 +72,7 @@ namespace chronovault_api.Controllers
         /// <returns>Usuário criado.</returns>
         /// <response code="201">Usuário criado com sucesso.</response>
         /// <response code="400">Dados inválidos ou erro na criação.</response>
-        [HttpPost]
+        [HttpPost("/")]
         [ProducesResponseType(typeof(UserResponseDTO), (int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult<UserResponseDTO>> Create([FromBody] UserCreateDTO dto)
