@@ -1,0 +1,54 @@
+<auth-page>
+    <form class="login-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <h2>Crie sua conta!</h2>
+    
+    <div class="login-form-inputs">
+      <app-input
+        [formControl]="getFormControl('name')"
+        [inputType]="'text'"
+        [inputId]="'name'"
+        [inputPlaceholder]="'Informe seu nome'"
+        [label]="'Nome'"
+      >
+      </app-input>
+
+      <app-input
+        [formControl]="getFormControl('email')"
+        [inputType]="'email'"
+        [inputId]="'email'"
+        [inputPlaceholder]="'Informe seu email'"
+        [label]="'Email'"
+      >
+      </app-input>
+
+      <app-input
+        [formControl]="getFormControl('password')"
+        [inputType]="'password'"
+        [inputId]="'password'"
+        [inputPlaceholder]="'Informe seu password'"
+        [label]="'Senha'"
+      >
+      </app-input>
+
+      <app-input
+        [formControl]="getFormControl('confirmPassword')"
+        [inputType]="'text'"
+        [inputId]="'confirmPassword'"
+        [inputPlaceholder]="'Confirme sua senha'"
+        [label]="'Confirmação de senha'"
+      >
+      </app-input>
+      
+      <div class="bottom-form">
+        <button type="submit" [disabled]="!registerForm.valid || isLoading" mat-flat-button type="submit">
+          @if(isLoading){
+            <mat-spinner color="#FFFFFF" diameter="24"></mat-spinner>
+          } @else{
+            Cadastrar
+          }
+        </button>
+        <p>Já possui conta? <a routerLink="/login">Entre</a></p>
+      </div>
+    </div>
+  </form>
+</auth-page>

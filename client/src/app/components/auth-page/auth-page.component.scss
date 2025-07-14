@@ -1,0 +1,39 @@
+main {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100%;
+  background: red;
+}
+
+aside {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  height: 100%;
+  background-color: #000000;
+}
+
+.navbar__logo {
+  color: #f1c40f;
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 4rem;
+  text-decoration: none;
+  text-align: center;
+  margin: 0 auto;
+}
+
+img {
+  height: 10rem;
+  width: 10rem;
+}
+
+.content-container {
+  width: 50%;
+  height: 100%;
+}

@@ -1,44 +1,20 @@
-<auth-page>
-  <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <h2>Bem vindo de volta!</h2>
-    
-    <div class="login-form-inputs">
-      <app-input
-        [formControl]="getFormControl('email')"
-        [inputType]="'email'"
-        [inputId]="'email'"
-        [inputPlaceholder]="'Informe seu email'"
-        [label]="'Email'"
-      >
-      </app-input>
-
-      <app-input
-        [formControl]="getFormControl('password')"
-        [inputType]="'password'"
-        [inputId]="'password'"
-        [inputPlaceholder]="'Informe seu password'"
-        [label]="'Senha'"
-      >
-      </app-input>
-
-      <a routerLink="/forgot-password" id="recover-password">Esqueci minha senha</a>
-      
-      <div class="bottom-form">
-        <button type="submit" [disabled]="!loginForm.valid || isLoading" mat-flat-button type="submit">
-          @if(isLoading){
-            <mat-spinner color="#FFFFFF" diameter="24"></mat-spinner>
-          } @else{
-            Entrar
-          }
-        </button>
-        <p>Não tem uma conta? <a routerLink="/register">Cadastrar-se</a></p>
-      </div>
-    </div>
-  </form>
-  
+<main>
   <!-- Login -->
   <div *ngIf="mode === 'login'">
-   
+    <form class="login-form" (ngSubmit)="onSubmit()">
+      <h2>Bem vindo de volta!</h2>
+      <div class="login-form-inputs">
+        <input type="text" placeholder="Email" name="email" [(ngModel)]="form.email" class="form-input-width" />
+        <input type="password" placeholder="Senha" name="password" [(ngModel)]="form.password" class="form-input-width" />
+        
+        <a routerLink="/recover" id="recover-password">Esqueci minha senha</a>
+        
+        <div class="bottom-form">
+          <button type="submit" class="form-input-width">Entrar</button>
+          <p>Não tem uma conta? <a routerLink="/register">Cadastrar-se</a></p>
+        </div>
+      </div>
+    </form>
   </div>
 
   <!-- Registro -->
@@ -52,7 +28,7 @@
         <input type="password" placeholder="Confirmar senha" class="form-input-width" />
         
         <div class="bottom-form">
-          <button type="submit" class="form-input-width" routerLink="/register">Cadastrar</button>
+          <button type="submit" class="form-input-width">Cadastrar</button>
           <p>Já possui conta? <a routerLink="/login">Entrar</a></p>
         </div>
       </div>
@@ -89,4 +65,4 @@
       </div>
     </form>
   </div>
-</auth-page>
+</main>
