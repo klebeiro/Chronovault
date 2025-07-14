@@ -1,0 +1,39 @@
+@use '@angular/material' as mat;
+@use './app/themes/_theme-colors' as theme-colors;
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  min-height: 100vh;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  height: 100%;
+}
+
+html {
+  @include mat.theme((color: 
+    (
+      primary: theme-colors.$primary-palette,
+      tertiary: theme-colors.$tertiary-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+:root {
+  @include mat.progress-spinner-overrides((
+    active-indicator-color: #FFFFFF,
+  ));
+}

@@ -21,13 +21,15 @@ import { SharedModule } from '../../shared/shared.module';
 import { AuthService } from '../../services';
 import { NotificationService } from '../../shared/services';
 
-interface LoginForm {
+interface RegisterForm {
+  name: FormControl<string>;
   email: FormControl<string>;
   password: FormControl<string>;
+  confirmPassword: FormControl<string>;
 }
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   imports: [
     RouterModule,
     CommonModule,
@@ -39,15 +41,11 @@ interface LoginForm {
     AuthPageComponent,
     MatProgressSpinnerModule
   ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.css'
 })
-export class LoginComponent implements OnInit {
-  loginForm!: FormGroup<LoginForm>;
-
-  mode: 'login' | 'register' | 'recover' | 'change-password' = 'login';
-  path: string | undefined = '';
-
+export class RegisterComponent implements OnInit {
+  registerForm!: FormGroup<RegisterForm>;
   isLoading: boolean = false;
 
   constructor(
@@ -57,18 +55,15 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.setLoginForm();
+    this.setregisterForm();
   }
 
-  form = {
-    email: '',
-    confirmEmail: '',
-    password: '',
-    confirmPassword: '',
-  };
-
-  setLoginForm() {
-    this.loginForm = this.fb.nonNullable.group<LoginForm>({
+  setregisterForm() {
+    this.registerForm = this.fb.nonNullable.group<RegisterForm>({
+      name: this.fb.control('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
       email: this.fb.control('', {
         nonNullable: true,
         validators: [Validators.required],
@@ -77,20 +72,23 @@ export class LoginComponent implements OnInit {
         nonNullable: true,
         validators: [Validators.required],
       }),
+      confirmPassword: this.fb.control('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
     });
   }
 
-  getFormControl(formControlName: keyof LoginForm): FormControl {
-    return this.loginForm.get(formControlName) as FormControl;
+  getFormControl(formControlName: keyof RegisterForm): FormControl {
+    return this.registerForm.get(formControlName) as FormControl;
   }
 
   onSubmit() {
-    if (!this.loginForm.valid) {
+    if (!this.registerForm.valid) {
       return;
     }
 
-    const formData = this.loginForm.value;
-
+    const formData = this.registerForm.value;
     this.isLoading = true;
 
     this.authService
