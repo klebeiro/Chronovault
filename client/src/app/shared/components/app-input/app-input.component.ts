@@ -31,6 +31,8 @@ export class AppInputComponent<T>
   @Input('label') label: string = '';
   @Input('inputType') inputType: InputType = 'text';
   @Input('inputPlaceholder') inputPlaceholder: string = '';
+  @Input('mask') mask: string = '';
+  @Input('prefix') prefix: string = '';
 
   getHasError(): boolean {
     if (!this.control) {

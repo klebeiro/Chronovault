@@ -1,1 +1,2 @@
 export { ControlValueAccessorDirective } from "./control-value-accessor/control-value-accessor.directive"
+export { ClickStopPropagationDirective } from "./click-stop-propagation/click-stop-propagation.directive"

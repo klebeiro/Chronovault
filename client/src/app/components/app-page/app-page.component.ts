@@ -6,8 +6,7 @@ import { FooterComponent } from '../footer/footer.component';
   selector: 'app-page',
   imports: [NavbarComponent, FooterComponent],
   templateUrl: './app-page.component.html',
-  styleUrl: './app-page.component.css'
+  styleUrl: './app-page.component.scss'
 })
 export class AppPageComponent {
-
 }

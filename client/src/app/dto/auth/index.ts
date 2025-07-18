@@ -1,2 +1,2 @@
-export type { LoginInputDTO } from "./LoginInputDTO";
-export type { LoginOutputDTO } from "./LoginOutputDTO";
+export type { LoginInputDTO } from './login-input.dto';
+export type { LoginOutputDTO } from './login-output.dto';
