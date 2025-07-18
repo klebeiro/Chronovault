@@ -1,10 +1,11 @@
-<div class="product-card">
+<div class="product-card" (click)="onProductClick()">
   <div class="product-image-container">
-    <img [ngSrc]="product.imagesUrls[productImgIndex]" alt="Product image" width="256" height="256" class="product-image" />
+    <img [ngSrc]="product.imagesUrls[productImgIndex]" priority alt="Product image" width="256" height="256"
+      class="product-image" />
 
     <div class="image-navigation">
-      <button (click)="previousImage()"><mat-icon class="material-icons">keyboard_arrow_left</mat-icon></button>
-      <button (click)="nextImage()"><mat-icon class="material-icons">keyboard_arrow_right</mat-icon></button>
+      <button (click)="previousImage()" clickStopPropagation><mat-icon class="material-icons">keyboard_arrow_left</mat-icon></button>
+      <button (click)="nextImage()" clickStopPropagation><mat-icon class="material-icons">keyboard_arrow_right</mat-icon></button>
     </div>
   </div>
 

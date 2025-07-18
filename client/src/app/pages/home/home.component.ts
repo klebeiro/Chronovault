@@ -1,14 +1,42 @@
-import { Component } from '@angular/core';
-import { ProductCardComponent } from '../../components/product-card/product-card.component';
-import { Product } from '../../models/product.model';
-import { AppPageComponent } from '../../components';
+import { Component, OnInit } from '@angular/core';
+
+import { AppPageComponent, ProductCardComponent } from '../../components';
+import { WatchService } from '../../services';
+import { SharedModule } from '../../shared';
+import { MostViewedWatchOutputDTO } from '../../dto/watches';
 
 @Component({
   selector: 'app-home',
-  imports: [ProductCardComponent, AppPageComponent],
+  imports: [ProductCardComponent, AppPageComponent, SharedModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrl: './home.component.css',
 })
-export class HomeComponent {
-  products: Product[] = [];
+export class HomeComponent implements OnInit {
+  isLoading: boolean = true;
+  mostViewedWaches: MostViewedWatchOutputDTO[] = [];
+
+  constructor(private watchService: WatchService) {}
+
+  ngOnInit(): void {
+    this.loadMostViewedProducts();
+  }
+
+  reload(){
+    this.loadMostViewedProducts();
+  }
+
+  loadMostViewedProducts(): void {
+    this.isLoading = true;  
+
+    this.watchService.getMostViewedWaches().subscribe({
+      next: (data) => {
+        this.mostViewedWaches = data;
+      },
+      error: (error) => {
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
+  }
 }

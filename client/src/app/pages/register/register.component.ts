@@ -20,13 +20,28 @@ import { SharedModule } from '../../shared/shared.module';
 
 import { AuthService } from '../../services';
 import { NotificationService } from '../../shared/services';
+import { MatStep, MatStepperModule } from '@angular/material/stepper';
+import { mask } from '../../shared/utils';
+import { StateModel } from '../../models';
+import { brazillianStates } from '../../shared/constants';
+import { SelectOption } from '../../shared/types';
 
-interface RegisterForm {
+interface UserInfoForm {
   name: FormControl<string>;
   email: FormControl<string>;
   password: FormControl<string>;
   confirmPassword: FormControl<string>;
 }
+
+interface AddressForm {
+  zipCode: FormControl<string>;
+  street: FormControl<string>;
+  number: FormControl<string>;
+  neighborhood: FormControl<string>;
+  city: FormControl<string>;
+  state: FormControl<string | null>;
+  complement: FormControl<string | null>;
+} 
 
 @Component({
   selector: 'app-register',
@@ -34,18 +49,22 @@ interface RegisterForm {
     RouterModule,
     CommonModule,
     ReactiveFormsModule,
-    HttpClientModule,
     FormsModule,
     MatButtonModule,
     SharedModule,
     AuthPageComponent,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatStep,
+    MatStepperModule
   ],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrl: './register.component.scss'
 })
 export class RegisterComponent implements OnInit {
-  registerForm!: FormGroup<RegisterForm>;
+  userInfoForm!: FormGroup<UserInfoForm>;
+  addressForm!: FormGroup<AddressForm>;
+  stateOptions: SelectOption<StateModel>[] = [];
+
   isLoading: boolean = false;
 
   constructor(
@@ -55,11 +74,21 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.setregisterForm();
+    this.setUserInfoForm();
+    this.setAddressForm();
+    this.setStates();
   }
 
-  setregisterForm() {
-    this.registerForm = this.fb.nonNullable.group<RegisterForm>({
+  setStates(){
+    this.stateOptions = brazillianStates.map((state) => ({
+      label: state.name,
+      value: state,
+      viewValue: state.name
+    }));
+  }
+
+  setUserInfoForm() {
+    this.userInfoForm = this.fb.nonNullable.group<UserInfoForm>({
       name: this.fb.control('', {
         nonNullable: true,
         validators: [Validators.required],
@@ -79,16 +108,53 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  getFormControl(formControlName: keyof RegisterForm): FormControl {
-    return this.registerForm.get(formControlName) as FormControl;
+  setAddressForm() {
+    this.addressForm = this.fb.group<AddressForm>({
+      zipCode: this.fb.control('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      street: this.fb.control('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      number: this.fb.control('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      neighborhood: this.fb.control('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      city: this.fb.control('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      state: this.fb.control(null, {
+        validators: [Validators.required],
+      }),
+      complement: this.fb.control(''),
+    });
+  }
+
+  getFormControl(formControlName: string): FormControl {
+    if(this.userInfoForm.get(formControlName) === null) {
+      return this.addressForm.get(formControlName) as FormControl;
+    }
+
+    return this.userInfoForm.get(formControlName) as FormControl;
+  }
+
+  getZipCodeMask() {
+    return mask.zipCode;
   }
 
   onSubmit() {
-    if (!this.registerForm.valid) {
+    if (!this.userInfoForm.valid) {
       return;
     }
 
-    const formData = this.registerForm.value;
+    const formData = this.userInfoForm.value;
     this.isLoading = true;
 
     this.authService

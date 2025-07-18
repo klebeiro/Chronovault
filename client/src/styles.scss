@@ -1,24 +1,28 @@
 @use '@angular/material' as mat;
 @use './app/themes/_theme-colors' as theme-colors;
 
+
+$compact-theme: mat.define-theme(
+  (
+    density: (
+      scale: -2
+    )
+  )
+);
+
 *,
 *::before,
 *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 html,
 body {
   height: 100%;
-  min-height: 100vh;
-}
-
-body {
-  margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  height: 100%;
 }
 
 html {
@@ -30,10 +34,7 @@ html {
     typography: Roboto,
     density: 0,
   ));
+
+  @include mat.form-field-density($compact-theme);
 }
 
-:root {
-  @include mat.progress-spinner-overrides((
-    active-indicator-color: #FFFFFF,
-  ));
-}

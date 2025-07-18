@@ -1,0 +1,107 @@
+<app-page>
+  @if(isLoading) {
+  <div class="loading-container"><page-loader></page-loader></div>
+  } @if (!isLoading && !watchDetails) {
+  <h1>Watch not found</h1>
+  }
+
+  @if(!isLoading && watchDetails) {
+  <div class="product-details">
+    <div class="product-overview">
+      <div class="product-images-container">
+        <div class="product-main-image-container">
+          <button (click)="previousImage()" class="left">
+            <mat-icon class="material-icons image-control">keyboard_arrow_left</mat-icon>
+          </button>
+          <img [src]="selectedImage?.url" priority alt="Product image" class="product-main-image" />
+          <button (click)="nextImage()" class="right">
+            <mat-icon class="material-icons image-control">keyboard_arrow_right</mat-icon>
+          </button>
+        </div>
+
+        <div class="product-mini-previews">
+          <div class="product-mini-previews-content">
+            @for (img of watchDetails.images; track img.id) {
+            <img [src]="img.url" alt="Imagem do Produto" [ngClass]="{'selected': img.id === selectedImage?.id}"
+              (click)="selectImage(img)" />
+            }
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="product-sale-info">
+        <h2>{{ watchDetails.brand }} - {{ watchDetails.model }}</h2>
+        <p class="product-description">{{ watchDetails.description }}</p>
+
+        <div class="price-container">
+          <mat-chip-set>
+            @if (watchDetails.isActive) {
+            <mat-chip color="primary" selected>Ativo</mat-chip>
+            } @if (watchDetails.isFeatured) {
+            <mat-chip color="accent" selected>Destaque</mat-chip>
+            } @if (watchDetails.isOnSale) {
+            <mat-chip color="warn" selected>Promoção</mat-chip>
+            }
+          </mat-chip-set>
+
+          <p class="price">
+            {{ watchDetails.price | currency:'EUR':'symbol':'1.2-2' }}
+          </p>
+        </div>
+
+        <div class="action-buttons-container">
+          <button mat-flat-button color="primary" class="buy-button" aria-label="Comprar">
+            <mat-icon class="material-icons">shopping_bag</mat-icon>
+            Comprar
+          </button>
+
+          <button mat-flat-button color="primary" aria-label="Adicionar ao carrinho">
+            <mat-icon class="material-icons">add_shopping_cart</mat-icon>
+            Adicionar ao carrinho
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="specs">
+      <div class="spec-list">
+        <h3>Especificações Gerais:</h3>
+
+        <div class="general-specs">
+          @for (spec of generalSpecs; track spec.title) {
+          <div class="general-spec-container">
+            <div class="general-spec-header">
+              <p class="general-spec-title">{{ spec.title }}</p>
+            </div>
+
+            <div class="general-spec-body">
+              <p class="general-spec-value">{{ spec.description }}</p>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+
+      <div class="spec-list">
+        <h3>Especificações Técnicas:</h3>
+
+        <div class="general-specs">
+          @for (spec of technicalSpecs; track spec.title) {
+          <div class="general-spec-container">
+            <div class="general-spec-header">
+              <p class="general-spec-title">{{ spec.title }}</p>
+            </div>
+
+            <div class="general-spec-body">
+              <p class="general-spec-value">{{ spec.description }}</p>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+</app-page>
