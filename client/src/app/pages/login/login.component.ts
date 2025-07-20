@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -19,7 +19,8 @@ import { AuthPageComponent } from '../../components';
 import { SharedModule } from '../../shared/shared.module';
 
 import { AuthService } from '../../services';
-import { NotificationService } from '../../shared/services';
+import { CartService, NotificationService } from '../../shared/services';
+import { LoginOutputDTO } from '../../dto/auth';
 
 interface LoginForm {
   email: FormControl<string>;
@@ -53,7 +54,9 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private router: Router,
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -100,8 +103,7 @@ export class LoginComponent implements OnInit {
       })
       .subscribe({
         next: (data) => {
-          console.log('data');
-          this.isLoading = false;
+          this.navigateToNextPage(data);
         },
         error: (error) => {
           this.notificationService.showErrorNotification({
@@ -110,6 +112,17 @@ export class LoginComponent implements OnInit {
           });
           this.isLoading = false;
         },
+        complete: () => {
+          this.isLoading = false;
+        }
       });
+  }
+
+  navigateToNextPage(loginOutputDTO: LoginOutputDTO){
+    if(this.cartService.cartIsEmpty()){
+      this.router.navigate(['/']);
+    } else {
+      this.router.navigate(['/checkout']);
+    }
   }
 }

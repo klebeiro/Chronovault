@@ -1,0 +1,28 @@
+@if(purchaseItem){
+<div class="purchase-item">
+  <img src="{{ purchaseItem.item.imagesUrls[0] }}" [alt]="purchaseItem.item.model" />
+
+  <div class="purchase-item-info-container">
+    <div class="purchase-item-info-row">
+      <p class="purchase-item-model">{{ purchaseItem.item.model }}</p>
+
+      <button mat-icon-button class="remove-from-cart-btn" (click)="removeItemFromCart()">
+        <mat-icon class="material-icons">close</mat-icon>
+      </button>
+    </div>
+
+    <div class="purchase-item-info-row">
+      <div>
+        <p class="purchase-item-brand"><span>Marca:</span> {{ purchaseItem.item.brand }}</p>
+        <p class="purchase-item-quantity"><span>Quantidade:</span> {{ purchaseItem.quantity }}</p>
+      </div>
+
+      <div class="purchase-item-price-container">
+        <p class="purchase-item-price-label">Total</p>
+        <strong>{{ 1000 | currency:'EUR':'symbol':'1.2-2' }}</strong>
+      </div>
+    </div>
+
+  </div>
+</div>
+}

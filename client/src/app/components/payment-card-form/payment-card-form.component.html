@@ -1,0 +1,35 @@
+<h3>Informações do cartão</h3>
+
+@if(paymentCardForm) {
+<form [formGroup]="paymentCardForm" (ngSubmit)="submitForm()">
+  <app-input [formControl]="getFormControl('cardNumber')" [inputType]="'text'" [inputId]="'cardNumber'"
+    [inputPlaceholder]="'Informe o número do cartão'" [label]="'Número do cartão'" [mask]="getMask('cardNumber')">
+  </app-input>
+
+  <div class="row">
+    <app-input [formControl]="getFormControl('expirationDate')" [inputType]="'text'" [inputId]="'expirationDate'"
+      [inputPlaceholder]="'MM/AA'" [label]="'Data de expiração'" [mask]="getMask('expirationDate')" class="half-width">
+    </app-input>
+    <app-input [formControl]="getFormControl('cvCode')" [inputType]="'text'" [inputId]="'cvCode'"
+      [inputPlaceholder]="'CVV'" [label]="'CVV'" [mask]="getMask('cvCode')" class="half-width">
+    </app-input>
+  </div>
+
+  <app-input [formControl]="getFormControl('cardHolderName')" [inputType]="'text'" [inputId]="'cardHolderName'"
+    [inputPlaceholder]="'Nome impresso no cartão'" [label]="'Nome impresso no cartão'">
+  </app-input>
+
+
+  <app-select [formControl]="getFormControl('installmentsNumber')" [selectId]="'installmentsNumber'" [selectPlaceholder]="'Informe o total de parcelas'"
+    [options]="installmentNumberOptions" [label]="'Número de parcelas'">
+  </app-select>
+
+  <div class="footer">
+    <button mat-flat-button type="submit">
+      Continuar
+    </button>
+  </div>
+</form>
+} @else{
+  <p>Formulário de tipos de pagamento indisponível</p>
+}

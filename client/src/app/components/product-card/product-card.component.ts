@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { SharedModule } from '../../shared';
 import { CompactWatchModel } from '../../models';
+import { CartService } from '../../shared/services';
 
 @Component({
   selector: 'app-product-card',
@@ -22,10 +23,34 @@ export class ProductCardComponent {
   };
   productImgIndex: number = 0;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private cartService: CartService) {}
 
   nextImage() {
     this.productImgIndex = (this.productImgIndex + 1) % this.product.imagesUrls.length;
+  }
+
+  clickCartButton() {
+    console.log('product', this.product);
+
+    if(this.cartService.getIsItemInCart(this.product.id)){
+      this.cartService.removeItemFromCart(this.product.id);
+      return;
+    };
+
+    this.cartService.addItemToCart({
+      item: {
+        brand: this.product.brand,
+        id: this.product.id,
+        imagesUrls: this.product.imagesUrls,
+        model: this.product.model,
+        price: this.product.price
+      },
+      quantity: 1
+    });
+  }
+
+  isInCart(){
+    return this.cartService.getIsItemInCart(this.product.id);
   }
 
   previousImage() {

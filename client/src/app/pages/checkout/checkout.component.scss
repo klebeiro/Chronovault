@@ -1,0 +1,29 @@
+main {
+  display: flex;
+  position: relative;
+
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+
+  width: 100%;
+  height: 100%;
+}
+
+.stepper {
+  background: #FFFFFF;
+  width: 100%;
+  max-width: 860px;
+}
+
+.payment-methods {
+  display: flex;
+  flex-direction: column;
+  padding: 0 2rem;
+
+  h2 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+}
+

@@ -1,0 +1,27 @@
+h3{
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+
+  .half-width {
+    width: 49%;
+  }
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%; 
+
+  button {
+    width: 20rem;
+    border-radius: 6px;
+  }
+}

@@ -1,5 +1,13 @@
-<main>
-  <app-navbar />
-  <ng-content></ng-content>
-  <app-footer />
-</main>
+<mat-drawer-container class="drawer-container" [hasBackdrop]="true" fullscreen>
+  <mat-drawer #drawer class="drawer-content-container" [mode]="'over'" [position]="'end'">
+    <app-cart></app-cart>
+  </mat-drawer>
+  
+  <mat-drawer-content>
+    <main>
+      <app-navbar />
+      <ng-content></ng-content>
+      <app-footer />
+    </main>
+  </mat-drawer-content>
+</mat-drawer-container>

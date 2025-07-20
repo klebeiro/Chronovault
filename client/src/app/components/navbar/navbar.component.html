@@ -1,17 +1,25 @@
 <nav class="navbar">
   <a class="navbar__logo" routerLink="/">Chronovault</a>
-  
+
   <a class="navbar__button" routerLink="/login">
     <mat-icon class="material-icons">person</mat-icon>
   </a>
 
-  <button class="navbar__button" (click)="toggleCart()" aria-label="Carrinho">
+  <button class="navbar__button" (click)="openCartDrawer()" aria-label="Carrinho">
     <mat-icon class="material-icons">shopping_cart</mat-icon>
   </button>
 </nav>
 
 <div class="cart" *ngIf="IsCartActive">
-  <button class="cart__close" (click)="toggleCart()" aria-label="Fechar carrinho">
-    <mat-icon class="material-icons">close</mat-icon>
-  </button>
+  <div class="cart-header">
+    <h2>Carrinho</h2>
+
+    <button class="cart__close" (click)="openCartDrawer()" aria-label="Fechar carrinho">
+      <mat-icon class="material-icons">close</mat-icon>
+    </button>
+  </div>
+
+  @for(purchaseItem of cart.items; track purchaseItem.item.id) {
+    <purchase-item-card [purchaseItem]="purchaseItem"></purchase-item-card>
+  }
 </div>

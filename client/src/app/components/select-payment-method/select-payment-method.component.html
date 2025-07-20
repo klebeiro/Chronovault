@@ -1,0 +1,42 @@
+<div class="payment-method-options">
+  @for(paymentTypeOption of paymentTypeOptions; track paymentTypeOption.value) {
+  <div class="payment-method-option-container"
+    [ngClass]="{ 'selected': paymentTypeOption.value == selectedPaymenType }"
+    (click)="changeSelectedPaymentOption(paymentTypeOption)">
+    <mat-icon class="material-icons payment-icon">{{ paymentTypeOption.iconName }}</mat-icon>
+    <p>{{ paymentTypeOption.label }}</p>
+  </div>
+  }
+</div>
+
+<div class="content-container">
+  @if(getIsCardPayment() && paymentCardForm != null) {
+    <payment-card-form [paymentCardForm]="paymentCardForm" (onSubmitValidForm)="emitOnSubmitValidForm()"></payment-card-form>
+  }
+
+  @if(getIsCardPayment() && !paymentCardForm) {
+    <p style="margin-top: 2rem;">Formulário de cartão indisponível</p>
+  }
+
+  @if(getIsTicketPayment()) {
+  <div class="payment-method-description">
+    <p class="payment-method-description-title">Pagamento no boleto</p>
+    <p class="payment-method-description-text">O boleto será enviado por e-mail após a finalização do pedido para que você possa realizar o pagamento</p>
+
+    <button mat-flat-button (click)="emitOnSubmitValidForm()">
+      Continuar
+    </button>
+  </div>
+  }
+
+  @if(getIsPixPayment()) {
+    <div class="payment-method-description">
+    <p class="payment-method-description-title">Pagamento no PIX</p>
+    <p class="payment-method-description-text">O QR Code será gerado após a finalização do pedido para que você possa realizar o pagamento</p>
+
+    <button mat-flat-button (click)="emitOnSubmitValidForm()">
+      Continuar
+    </button>
+  </div>
+  }
+</div>

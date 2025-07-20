@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PageLoaderComponent } from './page-loader.component';
+import { CartComponent } from './cart.component';
 
-describe('PageLoaderComponent', () => {
-  let component: PageLoaderComponent;
-  let fixture: ComponentFixture<PageLoaderComponent>;
+describe('CartComponent', () => {
+  let component: CartComponent;
+  let fixture: ComponentFixture<CartComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PageLoaderComponent]
+      imports: [CartComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PageLoaderComponent);
+    fixture = TestBed.createComponent(CartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

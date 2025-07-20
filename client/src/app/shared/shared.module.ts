@@ -3,11 +3,17 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { CommonModule } from '@angular/common';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-
-import { AppInputComponent, AppSelectComponent, PageLoaderComponent } from './components';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+import {
+  AppInputComponent,
+  AppLoadingIndicatorComponent,
+  AppSelectComponent,
+} from './components';
 import { ClickStopPropagationDirective } from './directives';
+import { CartService } from './services';
 
 @NgModule({
   imports: [
@@ -17,16 +23,20 @@ import { ClickStopPropagationDirective } from './directives';
     MatSelectModule,
     NgxMaskDirective,
     MatProgressSpinnerModule,
-    ClickStopPropagationDirective
+    ClickStopPropagationDirective,
+    CommonModule
   ],
   declarations: [
     AppInputComponent,
     AppSelectComponent,
-    PageLoaderComponent,
+    AppLoadingIndicatorComponent,
   ],
-  exports: [AppInputComponent, AppSelectComponent, PageLoaderComponent, ClickStopPropagationDirective],
-  providers: [
-    provideNgxMask()
-  ]
+  exports: [
+    AppInputComponent,
+    AppSelectComponent,
+    ClickStopPropagationDirective,
+    AppLoadingIndicatorComponent
+  ],
+  providers: [provideNgxMask()],
 })
 export class SharedModule {}

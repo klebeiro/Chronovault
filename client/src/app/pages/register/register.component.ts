@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -9,7 +9,7 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  Validators
+  Validators,
 } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -25,6 +25,7 @@ import { mask } from '../../shared/utils';
 import { StateModel } from '../../models';
 import { brazillianStates } from '../../shared/constants';
 import { SelectOption } from '../../shared/types';
+import { filter } from 'rxjs';
 
 interface UserInfoForm {
   name: FormControl<string>;
@@ -41,7 +42,7 @@ interface AddressForm {
   city: FormControl<string>;
   state: FormControl<string | null>;
   complement: FormControl<string | null>;
-} 
+}
 
 @Component({
   selector: 'app-register',
@@ -55,10 +56,10 @@ interface AddressForm {
     AuthPageComponent,
     MatProgressSpinnerModule,
     MatStep,
-    MatStepperModule
+    MatStepperModule,
   ],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  styleUrl: './register.component.scss',
 })
 export class RegisterComponent implements OnInit {
   userInfoForm!: FormGroup<UserInfoForm>;
@@ -70,7 +71,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
   ) {}
 
   ngOnInit(): void {
@@ -79,11 +80,11 @@ export class RegisterComponent implements OnInit {
     this.setStates();
   }
 
-  setStates(){
+  setStates() {
     this.stateOptions = brazillianStates.map((state) => ({
       label: state.name,
       value: state,
-      viewValue: state.name
+      viewValue: state.name,
     }));
   }
 
@@ -138,7 +139,7 @@ export class RegisterComponent implements OnInit {
   }
 
   getFormControl(formControlName: string): FormControl {
-    if(this.userInfoForm.get(formControlName) === null) {
+    if (this.userInfoForm.get(formControlName) === null) {
       return this.addressForm.get(formControlName) as FormControl;
     }
 

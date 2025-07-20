@@ -15,6 +15,6 @@
       <p class="product-brand">{{ product.brand }}</p>
       <p class="product-price">{{ product.price | currency:'EUR':'symbol':'1.2-2' }}</p>
     </div>
-    <button class="add-to-cart-btn"><mat-icon class="material-icons">add_shopping_cart</mat-icon></button>
+    <button class="add-to-cart-btn" (click)="clickCartButton()" clickStopPropagation><mat-icon class="material-icons">{{ isInCart() ? 'remove_shopping_cart' : 'add_shopping_cart' }}</mat-icon></button>
   </div>
 </div>

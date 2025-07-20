@@ -58,7 +58,14 @@ button {
 }
 
 .cart__close {
-  position: absolute;
-  top: 2.5rem;
-  right: 1.5rem;
+
+}
+
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  color: white;
+  margin-bottom: 1rem;
 }

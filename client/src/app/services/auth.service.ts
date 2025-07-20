@@ -18,9 +18,19 @@ export class AuthService {
     const completeApiUrl =
       this.webServiceConfigService.getCompleteApiUrl('/auth/login');
 
-    return this.httpClient.post<LoginOutputDTO>(completeApiUrl, {
-      email: input.email,
-      password: input.password,
-    });
+    // return this.httpClient.post<LoginOutputDTO>(completeApiUrl, {
+    //   email: input.email,
+    //   password: input.password,
+    // });
+
+    // simulate login
+    return new Observable<LoginOutputDTO>((observer) => {
+      observer.next({
+        id: 1,
+        email: input.email,
+        name: 'John Doe',
+        token: 'token',
+      })
+    })
   }
 }

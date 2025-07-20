@@ -1,7 +1,9 @@
 <app-page>
     <main>
         @if(isLoading){
-            <page-loader></page-loader>
+            <div class="loading-container">
+                <app-loading-indicator></app-loading-indicator>
+            </div>
         } @else{
 
             <h1>
