@@ -1,8 +1,10 @@
 <app-page>
   @if(isLoading) {
-  <div class="loading-container"><page-loader></page-loader></div>
+    <div class="loading-container">
+      <app-loading-indicator></app-loading-indicator>
+    </div>
   } @if (!isLoading && !watchDetails) {
-  <h1>Watch not found</h1>
+    <h1>Watch not found</h1>
   }
 
   @if(!isLoading && watchDetails) {
@@ -52,14 +54,14 @@
         </div>
 
         <div class="action-buttons-container">
-          <button mat-flat-button color="primary" class="buy-button" aria-label="Comprar">
+          <button mat-flat-button color="primary" (click)="goToCheckout()" class="buy-button" aria-label="Comprar">
             <mat-icon class="material-icons">shopping_bag</mat-icon>
             Comprar
           </button>
 
-          <button mat-flat-button color="primary" aria-label="Adicionar ao carrinho">
-            <mat-icon class="material-icons">add_shopping_cart</mat-icon>
-            Adicionar ao carrinho
+          <button mat-flat-button color="primary" (click)="addRemoveItemCart()">
+            <mat-icon class="material-icons" >{{ isInCart ? 'remove_shopping_cart' : 'add_shopping_cart' }}</mat-icon>
+            {{ isInCart ? 'Remover do carrinho' : 'Adicionar ao carrinho' }}
           </button>
         </div>
       </div>

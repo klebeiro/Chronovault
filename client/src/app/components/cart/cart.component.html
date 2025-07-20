@@ -1,0 +1,21 @@
+<div class="cart-header">
+  <h2>Carrinho</h2>
+
+  <button mat-icon-button (click)="closeCartDrawer()"  aria-label="Fechar carrinho">
+    <mat-icon class="material-icons">close</mat-icon>
+  </button>
+</div>
+
+<div class="cart-items">
+  @if(cart.items.length == 0) {
+    <p class="empty-cart-message">Seu carrinho está vazio</p>  
+  } @else {
+    @for(purchaseItem of cart.items; track purchaseItem.item.id) {
+      <purchase-item-card [purchaseItem]="purchaseItem"></purchase-item-card>
+    }
+
+    <button mat-flat-button color="primary" (click)="goToCheckout()">
+      Finalizar Compra
+    </button>
+  }
+</div>

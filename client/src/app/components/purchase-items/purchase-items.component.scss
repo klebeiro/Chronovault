@@ -1,0 +1,29 @@
+.purchase-items {
+  margin-top: 2rem;
+}
+
+.total-price-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4rem;
+}
+
+.total-price-label {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #5a5a5a;
+  margin-bottom: 0.2rem;
+}
+
+.total-price-value {
+  font-weight: 500;
+  font-size: 1.4rem;
+  color: #178f49;
+}
+
+button {
+  width: 20rem;
+  border-radius: 6px;
+}

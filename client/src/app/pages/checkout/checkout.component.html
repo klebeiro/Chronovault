@@ -1,0 +1,39 @@
+<app-page>
+  <main>
+    <mat-stepper #stepper linear class="stepper">
+      <mat-step>
+        <ng-template matStepLabel>Itens da Compra</ng-template>
+        <purchase-items (onConfirm)="goToNextStep()"></purchase-items>
+      </mat-step>
+
+      @if(getIsCardPayment()) {
+      <mat-step [stepControl]="paymentCardForm">
+        <ng-template matStepLabel>Forma de Pagamento</ng-template>
+        <select-payment-method
+          (onSubmitValidForm)="submitValidPaymentForm()"
+          (changeSelectedPaymentMethod)="changeSelectedPaymentType($event)"
+          [selectedPaymentType]="selectedPaymentMethod"
+          [paymentCardForm]="paymentCardForm"
+        ></select-payment-method>
+      </mat-step>
+
+      } @else {
+      <mat-step>
+        <ng-template matStepLabel>Forma de Pagamento</ng-template>
+        <select-payment-method
+          (onSubmitValidForm)="submitValidPaymentForm()"
+          (changeSelectedPaymentMethod)="changeSelectedPaymentType($event)"
+          [selectedPaymentType]="selectedPaymentMethod"
+          [paymentCardForm]="paymentCardForm"
+        >
+        </select-payment-method>
+      </mat-step>
+      }
+
+      <mat-step>
+        <ng-template matStepLabel>Confirmar Pedido</ng-template>
+        <order-confirmation (onConfirm)="finishOrder()"></order-confirmation>
+      </mat-step>
+    </mat-stepper>
+  </main>
+</app-page>

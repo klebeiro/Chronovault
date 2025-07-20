@@ -19,3 +19,12 @@ h1 {
     gap: 1.5rem;
     justify-items: center;
 }
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
