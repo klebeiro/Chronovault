@@ -1,25 +1,17 @@
-<nav class="navbar">
+<nav class="navbar" [ngClass]="{'bottom-margin': fixedElementsMarginActive}">
   <a class="navbar__logo" routerLink="/">Chronovault</a>
-
-  <a class="navbar__button" routerLink="/login">
+  
+  <a class="navbar__button" (click)="clickProfile()">
     <mat-icon class="material-icons">person</mat-icon>
-  </a>
+  </a>  
 
   <button class="navbar__button" (click)="openCartDrawer()" aria-label="Carrinho">
     <mat-icon class="material-icons">shopping_cart</mat-icon>
   </button>
-</nav>
 
-<div class="cart" *ngIf="IsCartActive">
-  <div class="cart-header">
-    <h2>Carrinho</h2>
-
-    <button class="cart__close" (click)="openCartDrawer()" aria-label="Fechar carrinho">
-      <mat-icon class="material-icons">close</mat-icon>
+  @if(showLogoutButton) {
+    <button class="navbar__button" (click)="logout()" aria-label="Logout">
+      <mat-icon class="material-icons">logout</mat-icon>
     </button>
-  </div>
-
-  @for(purchaseItem of cart.items; track purchaseItem.item.id) {
-    <purchase-item-card [purchaseItem]="purchaseItem"></purchase-item-card>
   }
-</div>
+</nav>

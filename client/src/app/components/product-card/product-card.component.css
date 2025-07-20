@@ -1,11 +1,12 @@
 .product-card {
+  display: flex;
+  flex-direction: column;
   background-color: #fff;
   padding: 1rem;
   border-radius: 16px;
   text-align: center;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   width: 100%;
-  max-width: 260px;
   border: 1px solid white;
 }
 
@@ -23,9 +24,11 @@
 }
 
 .product-image {
-  max-width: 100%;
-  object-fit: contain;
   border-radius: 12px;
+  
+  height: 14rem;
+  width: 100%;
+  object-fit: cover;
 }
 
 .image-navigation {

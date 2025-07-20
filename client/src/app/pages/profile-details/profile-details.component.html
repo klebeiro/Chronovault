@@ -1,0 +1,51 @@
+<div class="content-container">
+  <h2>Informações pessoais</h2>
+
+  <form class="form" [formGroup]="userInfoForm">
+    <div class="form-inputs">
+      <app-input [formControl]="getFormControl('name')" [inputType]="'text'" [inputId]="'name'"
+        [inputPlaceholder]="'Informe seu nome'" [label]="'Nome'">
+      </app-input>
+
+      <app-input [formControl]="getFormControl('email')" [inputType]="'email'" [inputId]="'email'"
+        [inputPlaceholder]="'Informe seu email'" [label]="'Email'">
+      </app-input>
+
+      <div class="form-inputs">
+        <app-input [formControl]="getFormControl('zipCode')" [inputType]="'text'" [inputId]="'CEP'"
+          [inputPlaceholder]="'Informe o CEP'" [label]="'CEP'" [mask]="getZipCodeMask()">
+        </app-input>
+
+        <app-select [formControl]="getFormControl('state')" [selectId]="'state'"
+          [selectPlaceholder]="'Informe o estado'" [options]="stateOptions" [label]="'Selecione seu estado'">
+        </app-select>
+
+        <app-input [formControl]="getFormControl('city')" [inputType]="'text'" [inputId]="'city'"
+          [inputPlaceholder]="'Informe a cidade'" [label]="'Cidade'">
+        </app-input>
+
+        <app-input [formControl]="getFormControl('neighborhood')" [inputType]="'text'" [inputId]="'neighborhood'"
+          [inputPlaceholder]="'Informe o bairro'" [label]="'Bairro'">
+        </app-input>
+
+        <div style="
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+          ">
+          <app-input [formControl]="getFormControl('street')" style="width: 48%" [inputType]="'text'"
+            [inputId]="'street'" [inputPlaceholder]="'Informe a rua'" [label]="'Rua'">
+          </app-input>
+
+          <app-input [formControl]="getFormControl('number')" style="width: 48%" [inputType]="'text'"
+            [inputId]="'number'" [inputPlaceholder]="'Informe o número'" [label]="'Número'">
+          </app-input>
+        </div>
+
+        <app-input [formControl]="getFormControl('complement')" [inputType]="'text'" [inputId]="'complement'"
+          [inputPlaceholder]="'Informe o complemento'" [label]="'Complemento'">
+        </app-input>
+      </div>
+    </div>
+  </form>
+</div>

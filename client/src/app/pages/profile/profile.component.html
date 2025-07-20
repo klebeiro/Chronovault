@@ -1,0 +1,27 @@
+<app-page [fixedElementsMarginActive]="false">
+  <main>
+    <aside>
+      @for(menuItem of menuItems; track menuItem.label) { 
+        @if(getSelectedRoute() == menuItem.route) {
+          <button
+            mat-flat-button
+            color="primary"
+            (click)="navigateTo(menuItem.route)"
+          >
+            <mat-icon class="material-icons">{{ menuItem.icon }}</mat-icon>
+            {{ menuItem.label }}
+          </button>
+        } @else{
+          <button mat-button (click)="navigateTo(menuItem.route)">
+            <mat-icon class="material-icons">{{ menuItem.icon }}</mat-icon>
+            {{ menuItem.label }}
+          </button>
+        } 
+      }
+    </aside>
+
+    <section>
+      <router-outlet></router-outlet>
+    </section>
+  </main>
+</app-page>

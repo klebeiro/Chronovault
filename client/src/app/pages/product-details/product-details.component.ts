@@ -7,7 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AppPageComponent } from '../../components';
 import { WatchDetailsModel, WatchImageModel } from '../../models';
-import { WatchService } from '../../services';
+import { AuthService, WatchService } from '../../services';
 import { SharedModule } from '../../shared';
 
 import { WatchSpec } from './product-details.types';
@@ -42,7 +42,8 @@ export class ProductDetailsComponent implements OnInit {
     private watchService: WatchService,
     private cartService: CartService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -61,6 +62,7 @@ export class ProductDetailsComponent implements OnInit {
       }
     });
   }
+
 
   checkWatchInCart(watchId: number) {
     this.isInCart = this.cartService.getIsItemInCart(watchId);
@@ -176,10 +178,15 @@ export class ProductDetailsComponent implements OnInit {
       return;
     }
 
-    console.log(this.isInCart);
-
     if (!this.isInCart) {
       this.addCurrentWatchInCart(this.watchDetails);
+    }
+
+    console.log("Is authenticated: ", this.authService.getIsAuthenticated());
+
+    if(!this.authService.getIsAuthenticated()) {
+      this.router.navigate(['login']);
+      return;
     }
 
     this.router.navigate(['checkout']);

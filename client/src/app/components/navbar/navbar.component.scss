@@ -17,7 +17,10 @@ button {
   background-color: black;
   padding: 0.5rem 1rem;
   color: white;
-  margin-bottom: 1rem;
+
+  &.bottom-margin{
+    margin-bottom: 1rem;
+  }
 }
 
 .navbar__logo {
@@ -38,6 +41,7 @@ button {
   justify-content: center;
   padding: .5rem;
   margin: .5rem;
+  cursor: pointer;
 }
 
 .material-icons {

@@ -33,6 +33,7 @@ export class AppInputComponent<T>
   @Input('inputPlaceholder') inputPlaceholder: string = '';
   @Input('mask') mask: string = '';
   @Input('prefix') prefix: string = '';
+  @Input('readonly') readonly: boolean = false;
 
   getHasError(): boolean {
     if (!this.control) {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 
 import { NavbarComponent } from '../navbar/navbar.component';
@@ -16,6 +16,7 @@ import { CartComponent } from '../cart/cart.component';
 export class AppPageComponent implements OnInit {
   cart: Cart = { items: [] };
   @ViewChild("drawer") drawer: MatDrawer | undefined;
+  @Input("fixedElementsMarginActive") fixedElementsMarginActive: boolean = true;
 
   constructor(private cartService: CartService) {}
 

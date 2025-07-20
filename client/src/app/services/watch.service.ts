@@ -13,6 +13,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { WebServiceConfigService } from '../shared/services';
 import { MostViewedWatchOutputDTO } from '../dto/watches';
+import { MOCK_WATCHES } from '../shared/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -178,36 +179,14 @@ export class WatchService {
 
     return new Observable<WatchDetailsModel>((observer) => {
       setTimeout(() => {
-        const watchDetails: WatchDetailsModel = {
-          brand: 'Rolex',
-          category: WatchCategoryEnum.Casual,
-          caseMaterial: CaseMaterialEnum.StainlessSteel,
-          description: 'Rolex',
-          gender: ProductGenderEnum.Male,
-          id: 1,
-          images: [
-            {
-              id: 1,
-              url: fakeImages[0],
-              order: 1,
-            },
-            {
-              id: 2,
-              url: fakeImages[1],
-              order: 2,
-            },
-          ],
-          movementType: MovementTypeEnum.Quartz,
-          model: 'Rolex',
-          price: 1000,
-          strapMaterial: StrapMaterialEnum.Leather,
-          stockQuantity: 10,
-          waterResistance: WaterResistanceEnum.None,
-          isActive: true,
-          isFeatured: true,
-          isOnSale: false,
-          warranty: null,
-        };
+        const watchDetails = MOCK_WATCHES.find(
+          (watch) => watch.id === id
+        )
+
+        if(!watchDetails) {
+          observer.error(new Error('Watch not found'));
+          return;
+        }
 
         observer.next(watchDetails);
         observer.complete();
@@ -225,50 +204,15 @@ export class WatchService {
       'https://th.bing.com/th/id/OIP.s-fAAGrOYb0g7m2pjyygawHaHa?cb=iwc2&rs=1&pid=ImgDetMain',
     ];
 
-    const mostViewedProductOutputDtos: MostViewedWatchOutputDTO[] = [
-      {
-        id: 1,
-        model: 'Rolex',
-        brand: 'Rolex',
-        price: 1000,
-        imagesUrls: fakeImages,
-      },
-      {
-        id: 2,
-        model: 'New Rolex',
-        brand: 'New',
-        price: 1000,
-        imagesUrls: fakeImages,
-      },
-      {
-        id: 3,
-        model: 'Cassio Premium',
-        brand: 'Cassio',
-        price: 1000,
-        imagesUrls: fakeImages,
-      },
-      {
-        id: 4,
-        model: 'Lambo One',
-        brand: 'Lamborghini',
-        price: 1000,
-        imagesUrls: fakeImages,
-      },
-      {
-        id: 5,
-        model: 'Lambo Two',
-        brand: 'Lamborghini',
-        price: 1000,
-        imagesUrls: fakeImages,
-      },
-      {
-        id: 6,
-        model: 'Lambo Three',
-        brand: 'Lamborghini',
-        price: 1000,
-        imagesUrls: fakeImages,
-      },
-    ];
+    const mostViewedProductOutputDtos: MostViewedWatchOutputDTO[] = MOCK_WATCHES.map(
+      (product) => ({
+        id: product.id,
+        model: product.model,
+        brand: product.brand,
+        price: product.price,
+        imagesUrls: product.images.map((image) => image.url),
+      })
+    )
 
     const mostViewProducts: CompactWatchModel[] =
       mostViewedProductOutputDtos.map((product) => ({
