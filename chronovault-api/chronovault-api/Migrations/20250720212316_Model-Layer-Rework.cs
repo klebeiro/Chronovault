@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace chronovault_api.Migrations
 {
     /// <inheritdoc />
-    public partial class databaseinitialmigration : Migration
+    public partial class ModelLayerRework : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,11 +19,12 @@ namespace chronovault_api.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Model = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Brand = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Images = table.Column<string>(type: "TEXT", nullable: false),
                     Category = table.Column<int>(type: "INTEGER", nullable: true),
                     Gender = table.Column<int>(type: "INTEGER", nullable: true),
                     MovementType = table.Column<int>(type: "INTEGER", nullable: true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
                     StockQuantity = table.Column<int>(type: "INTEGER", nullable: false),
                     IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
                     IsFeatured = table.Column<bool>(type: "INTEGER", nullable: false),
@@ -49,53 +50,22 @@ namespace chronovault_api.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Email = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
                     Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Phone = table.Column<string>(type: "TEXT", nullable: true),
-                    CPF = table.Column<string>(type: "TEXT", nullable: true),
+                    Phone = table.Column<string>(type: "TEXT", nullable: false),
+                    CPF = table.Column<string>(type: "TEXT", nullable: false),
                     BirthDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Address_Street = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
-                    Address_City = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
-                    Address_ZipCode = table.Column<string>(type: "TEXT", maxLength: 20, nullable: true),
-                    Address_State = table.Column<string>(type: "TEXT", nullable: true),
-                    Address_Country = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
-                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
-                    EmailConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    LastLogin = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    PreferredBrand = table.Column<string>(type: "TEXT", nullable: true),
-                    PreferredGender = table.Column<int>(type: "INTEGER", nullable: true),
-                    MinimumPriceRange = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    MaximumPriceRange = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    AcceptsNewsletter = table.Column<bool>(type: "INTEGER", nullable: false),
-                    AcceptsPromotions = table.Column<bool>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Images",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    FileName = table.Column<string>(type: "TEXT", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    Order = table.Column<int>(type: "INTEGER", nullable: false),
-                    ProductId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Address_Street = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
+                    Address_Number = table.Column<string>(type: "TEXT", nullable: true),
+                    Address_City = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Address_ZipCode = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
+                    Address_State = table.Column<string>(type: "TEXT", nullable: false),
+                    Address_Country = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Address_Complement = table.Column<string>(type: "TEXT", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Images", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Images_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -104,24 +74,30 @@ namespace chronovault_api.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
                     OrderNumber = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
                     TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ShippingCost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    TaxAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    DiscountAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ShippingAddress_Street = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
+                    ShippingAddress_Number = table.Column<string>(type: "TEXT", nullable: true),
                     ShippingAddress_City = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     ShippingAddress_ZipCode = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     ShippingAddress_State = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     ShippingAddress_Country = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    ShippingAddress_Complement = table.Column<string>(type: "TEXT", nullable: true),
                     PaymentMethod = table.Column<int>(type: "INTEGER", nullable: false),
                     PaymentStatus = table.Column<int>(type: "INTEGER", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Notes = table.Column<string>(type: "TEXT", nullable: false)
+                    Notes = table.Column<string>(type: "TEXT", nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    CardholderName = table.Column<string>(type: "TEXT", nullable: false),
+                    LastFourDigits = table.Column<string>(type: "TEXT", nullable: false),
+                    PaymentToken = table.Column<string>(type: "TEXT", nullable: false),
+                    ExpiryMonth = table.Column<int>(type: "INTEGER", nullable: true),
+                    ExpiryYear = table.Column<int>(type: "INTEGER", nullable: true),
+                    InstallmentCount = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -139,8 +115,8 @@ namespace chronovault_api.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    PasswordHash = table.Column<byte[]>(type: "BLOB", nullable: false),
-                    PasswordSalt = table.Column<byte[]>(type: "BLOB", nullable: false)
+                    PasswordHash = table.Column<string>(type: "TEXT", nullable: false),
+                    Role = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -161,9 +137,8 @@ namespace chronovault_api.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     OrderId = table.Column<int>(type: "INTEGER", nullable: false),
                     ProductId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    DiscountAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -181,11 +156,6 @@ namespace chronovault_api.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Images_ProductId",
-                table: "Images",
-                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_OrderId",
@@ -238,9 +208,6 @@ namespace chronovault_api.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Images");
-
             migrationBuilder.DropTable(
                 name: "OrderItems");
 

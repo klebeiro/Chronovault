@@ -11,9 +11,6 @@ public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
         builder.Property(oi => oi.Price)
             .HasColumnType("decimal(18,2)");
 
-        builder.Property(oi => oi.DiscountAmount)
-            .HasColumnType("decimal(18,2)");
-
         builder.HasOne(oi => oi.Order)
             .WithMany(o => o.OrderItems)
             .HasForeignKey(oi => oi.OrderId)

@@ -4,11 +4,9 @@ namespace chronovault_api.DTOs.Request
 {
     public class OrderCreateDTO
     {
-        public int UserId { get; set; }
-        public List<OrderItemCreateDTO> OrderItems { get; set; }
-        public decimal ShippingCost { get; set; }
-        public decimal DiscountAmount { get; set; }
+        public List<OrderItemCreateDTO> OrderItems { get; set; } = new List<OrderItemCreateDTO>();
+        public CreditCardDTO? CreditCardInformation { get; set;}
         public PaymentMethod PaymentMethod { get; set; }
-        public string? ShippingAddress { get; set; }
+        public AddressDTO ShippingAddress { get; set; }
     }
 }

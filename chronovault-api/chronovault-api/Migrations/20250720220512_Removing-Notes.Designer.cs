@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using chronovault_api.Infra.Data;
 
@@ -10,9 +11,11 @@ using chronovault_api.Infra.Data;
 namespace chronovault_api.Migrations
 {
     [DbContext(typeof(ChronovaultDbContext))]
-    partial class ChronovaultDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250720220512_Removing-Notes")]
+    partial class RemovingNotes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.5");
@@ -24,6 +27,7 @@ namespace chronovault_api.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CardholderName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
@@ -39,6 +43,7 @@ namespace chronovault_api.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("LastFourDigits")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("OrderNumber")
@@ -56,7 +61,11 @@ namespace chronovault_api.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("PaymentToken")
+                        .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<decimal>("ShippingCost")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
