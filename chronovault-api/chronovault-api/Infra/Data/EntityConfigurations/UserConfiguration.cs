@@ -21,12 +21,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasIndex(u => u.Name);
 
-        builder.Property(u => u.MinimumPriceRange)
-            .HasColumnType("decimal(18,2)");
-
-        builder.Property(u => u.MaximumPriceRange)
-            .HasColumnType("decimal(18,2)");
-
         builder.OwnsOne(u => u.Address, address =>
         {
             address.Property(a => a.Street).HasMaxLength(255);

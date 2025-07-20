@@ -2,6 +2,7 @@
 using chronovault_api.DTOs.Response;
 using chronovault_api.Services.Interfaces;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -11,13 +12,14 @@ namespace chronovault_api.Controllers
     /// Controller responsável pelo gerenciamento de usuários.
     /// </summary>
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     [Produces("application/json")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IJwtService _jwtService;
         private readonly IValidator<UserCreateDTO> _userCreateValidator;
-        private readonly IValidator<UserUpdateDTO> _userUpdateValidator;
         private readonly IValidator<UserCredentialDTO> _credentialValidator;
 
         /// <summary>
@@ -25,14 +27,14 @@ namespace chronovault_api.Controllers
         /// </summary>
         public UserController(
             IUserService userService,
+            IJwtService jwtService,
             IValidator<UserCreateDTO> userCreateValidator,
-            IValidator<UserUpdateDTO> userUpdateValidator,
             IValidator<UserCredentialDTO> credentialValidator)
         {
             _userService = userService;
             _userCreateValidator = userCreateValidator;
-            _userUpdateValidator = userUpdateValidator;
             _credentialValidator = credentialValidator;
+            _jwtService = jwtService;
         }
 
         /// <summary>
@@ -42,7 +44,7 @@ namespace chronovault_api.Controllers
         /// <returns>Usuário encontrado ou NotFound.</returns>
         /// <response code="200">Usuário encontrado.</response>
         /// <response code="404">Usuário não encontrado.</response>
-        [HttpGet("{id}")]
+        [HttpGet("{id}/details")]
         [ProducesResponseType(typeof(UserResponseDTO), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<ActionResult<UserResponseDTO>> GetById(int id)
@@ -57,7 +59,7 @@ namespace chronovault_api.Controllers
         /// </summary>
         /// <returns>Lista de usuários.</returns>
         /// <response code="200">Lista de usuários retornada.</response>
-        [HttpGet]
+        [HttpGet("get-all")]
         [ProducesResponseType(typeof(IEnumerable<UserResponseDTO>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<IEnumerable<UserResponseDTO>>> GetAll()
         {
@@ -72,7 +74,8 @@ namespace chronovault_api.Controllers
         /// <returns>Usuário criado.</returns>
         /// <response code="201">Usuário criado com sucesso.</response>
         /// <response code="400">Dados inválidos ou erro na criação.</response>
-        [HttpPost("/")]
+        [HttpPost("create")]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(UserResponseDTO), (int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult<UserResponseDTO>> Create([FromBody] UserCreateDTO dto)
@@ -87,47 +90,6 @@ namespace chronovault_api.Controllers
         }
 
         /// <summary>
-        /// Atualiza um usuário existente.
-        /// </summary>
-        /// <param name="id">ID do usuário.</param>
-        /// <param name="dto">Dados para atualização.</param>
-        /// <returns>Usuário atualizado.</returns>
-        /// <response code="200">Usuário atualizado com sucesso.</response>
-        /// <response code="400">Dados inválidos.</response>
-        /// <response code="404">Usuário não encontrado.</response>
-        [HttpPut("{id}")]
-        [ProducesResponseType(typeof(UserResponseDTO), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<UserResponseDTO>> Update(int id, [FromBody] UserUpdateDTO dto)
-        {
-            var validation = await _userUpdateValidator.ValidateAsync(dto);
-            if (!validation.IsValid)
-                return BadRequest(validation.Errors);
-
-            var updated = await _userService.UpdateAsync(id, dto);
-            if (updated == null) return NotFound();
-            return Ok(updated);
-        }
-
-        /// <summary>
-        /// Remove um usuário pelo ID.
-        /// </summary>
-        /// <param name="id">ID do usuário.</param>
-        /// <returns>NoContent se removido, NotFound se não existir.</returns>
-        /// <response code="204">Usuário removido com sucesso.</response>
-        /// <response code="404">Usuário não encontrado.</response>
-        [HttpDelete("{id}")]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var deleted = await _userService.DeleteAsync(id);
-            if (!deleted) return NotFound();
-            return NoContent();
-        }
-
-        /// <summary>
         /// Realiza login do usuário.
         /// </summary>
         /// <param name="dto">Credenciais do usuário.</param>
@@ -136,6 +98,7 @@ namespace chronovault_api.Controllers
         /// <response code="400">Dados inválidos.</response>
         /// <response code="401">Credenciais inválidas.</response>
         [HttpPost("login")]
+        [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
@@ -145,33 +108,10 @@ namespace chronovault_api.Controllers
             if (!validation.IsValid)
                 return BadRequest(validation.Errors);
 
-            var isValid = await _userService.ValidateCredentialsAsync(dto.Email, dto.Password);
-            if (!isValid) return Unauthorized("Invalid credentials.");
-            // Aqui você pode retornar um token JWT, se desejar
-            return Ok("Login successful.");
-        }
+            var authReturn = await _jwtService.GenerateToken(dto);
+            if (string.IsNullOrEmpty(authReturn.Token)) return Unauthorized("Invalid credentials.");
 
-        /// <summary>
-        /// Altera a senha de um usuário.
-        /// </summary>
-        /// <param name="userId">ID do usuário.</param>
-        /// <param name="newPassword">Nova senha.</param>
-        /// <returns>Ok se alterada, NotFound se usuário não existir.</returns>
-        /// <response code="200">Senha alterada com sucesso.</response>
-        /// <response code="400">Senha inválida.</response>
-        /// <response code="404">Usuário não encontrado.</response>
-        [HttpPost("change-password/{userId}")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> ChangePassword(int userId, [FromBody] string newPassword)
-        {
-            if (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < 8)
-                return BadRequest("Password must be at least 8 characters.");
-
-            var changed = await _userService.ChangePasswordAsync(userId, newPassword);
-            if (!changed) return NotFound();
-            return Ok("Password changed.");
+            return Ok(authReturn);
         }
     }
 }

@@ -12,15 +12,6 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(o => o.TotalAmount)
             .HasColumnType("decimal(18,2)");
 
-        builder.Property(o => o.ShippingCost)
-            .HasColumnType("decimal(18,2)");
-
-        builder.Property(o => o.TaxAmount)
-            .HasColumnType("decimal(18,2)");
-
-        builder.Property(o => o.DiscountAmount)
-            .HasColumnType("decimal(18,2)");
-
         builder.Property(o => o.OrderNumber)
             .HasMaxLength(50);
 
@@ -39,7 +30,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         });
 
         builder.HasOne(o => o.User)
-            .WithMany()
+            .WithMany(u => u.Orders)
             .HasForeignKey(o => o.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 

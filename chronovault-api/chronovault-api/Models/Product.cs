@@ -7,9 +7,10 @@ namespace chronovault_api.Models
         public int Id { get; set; }
         public string Model { get; set; }
         public string Brand { get; set; }
+        public string? Description { get; set; }
         public decimal Price { get; set; }
 
-        public ICollection<Image> Images { get; set; } = new List<Image>();
+        public List<string> Images { get; set; } = new List<string>();
 
         public WatchCategory? Category { get; set; }
 
@@ -17,7 +18,6 @@ namespace chronovault_api.Models
 
         public MovementType? MovementType { get; set; }
 
-        public string? Description { get; set; }
 
         public int StockQuantity { get; set; } = 0;
 
@@ -36,19 +36,5 @@ namespace chronovault_api.Models
 
         public WaterResistance? WaterResistance { get; set; }
 
-        public decimal? OriginalPrice { get; set; }
-
-        public decimal DiscountPercentage => OriginalPrice.HasValue && OriginalPrice > 0
-            ? Math.Round(((OriginalPrice.Value - Price) / OriginalPrice.Value) * 100, 2)
-            : 0;
-
-        public bool IsInStock => StockQuantity > 0;
-
-        public bool HasDiscount => OriginalPrice.HasValue && OriginalPrice > Price;
-
-        public bool IsValidForSale()
-        {
-            return IsActive && IsInStock && Price > 0;
-        }
     }
 }

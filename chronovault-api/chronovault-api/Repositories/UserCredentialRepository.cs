@@ -28,42 +28,5 @@ namespace chronovault_api.Repositories
             await _context.SaveChangesAsync();
             return credential;
         }
-
-        public async Task<UserCredential> UpdateAsync(UserCredential credential)
-        {
-            _context.UserCredentials.Update(credential);
-            await _context.SaveChangesAsync();
-            return credential;
-        }
-
-        public async Task<bool> DeleteAsync(int userId)
-        {
-            var credential = await _context.UserCredentials.FindAsync(userId);
-            if (credential == null) return false;
-
-            _context.UserCredentials.Remove(credential);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<bool> ValidateCredentialsAsync(string email, string password)
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-            if (user == null) return false;
-
-            var credential = await _context.UserCredentials.FirstOrDefaultAsync(uc => uc.UserId == user.Id);
-            if (credential == null) return false;
-
-            return VerifyPassword(password, credential.PasswordHash, credential.PasswordSalt);
-        }
-
-        private bool VerifyPassword(string password, byte[] hash, byte[] salt)
-        {
-            using (var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 10000))
-            {
-                byte[] computedHash = pbkdf2.GetBytes(32);
-                return computedHash.SequenceEqual(hash);
-            }
-        }
     }
 }

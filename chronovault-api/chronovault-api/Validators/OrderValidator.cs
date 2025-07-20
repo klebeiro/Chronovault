@@ -1,4 +1,5 @@
 ﻿using chronovault_api.DTOs.Request;
+using chronovault_api.Models.Enums;
 using FluentValidation;
 
 namespace chronovault_api.Validators
@@ -7,40 +8,29 @@ namespace chronovault_api.Validators
     {
         public OrderCreateDTOValidator()
         {
-            RuleFor(x => x.UserId)
-                .NotEmpty().WithMessage("UserId is required.")
-                .GreaterThan(0).WithMessage("UserId must be greater than 0.");
+            RuleFor(o => o.OrderItems)
+                .NotEmpty().WithMessage("Order must have at least one item.")
+                .Must(items => items != null && items.Count > 0)
+                .WithMessage("Order items cannot be null or empty.");
 
-            RuleFor(x => x.OrderItems)
-                .NotEmpty().WithMessage("OrderItems is required.")
-                .Must(x => x != null && x.Any()).WithMessage("OrderItems must contain at least one item.");
-
-            RuleForEach(x => x.OrderItems)
+            RuleForEach(o => o.OrderItems)
                 .SetValidator(new OrderItemCreateDTOValidator());
 
-            RuleFor(x => x.ShippingCost)
-                .GreaterThanOrEqualTo(0).WithMessage("ShippingCost must be greater than or equal to 0.");
+            RuleFor(o => o.PaymentMethod)
+                .IsInEnum().WithMessage("Invalid payment method.");
 
-            RuleFor(x => x.DiscountAmount)
-                .GreaterThanOrEqualTo(0).WithMessage("DiscountAmount must be greater than or equal to 0.");
+            When(o => o.PaymentMethod == PaymentMethod.CreditCard, () =>
+            {
+                RuleFor(o => o.CreditCardInformation)
+                    .NotNull().WithMessage("Credit card information is required for credit card payments.")
+                    .SetValidator(new CreditCardValidator()!);
+            });
 
-            RuleFor(x => x.ShippingAddress)
-                .MaximumLength(200).WithMessage("ShippingAddress must not exceed 200 characters.");
-        }
-    }
-
-    public class OrderUpdateDTOValidator : AbstractValidator<OrderUpdateDTO>
-    {
-        public OrderUpdateDTOValidator()
-        {
-            RuleFor(x => x.ShippingCost)
-                .GreaterThanOrEqualTo(0).WithMessage("ShippingCost must be greater than or equal to 0.");
-
-            RuleFor(x => x.DiscountAmount)
-                .GreaterThanOrEqualTo(0).WithMessage("DiscountAmount must be greater than or equal to 0.");
-
-            RuleFor(x => x.ShippingAddress)
-                .MaximumLength(200).WithMessage("ShippingAddress must not exceed 200 characters.");
+            When(o => o.PaymentMethod != PaymentMethod.CreditCard, () =>
+            {
+                RuleFor(o => o.CreditCardInformation)
+                    .Null().WithMessage("Credit card information should not be provided for non-credit card payments.");
+            });
         }
     }
 }

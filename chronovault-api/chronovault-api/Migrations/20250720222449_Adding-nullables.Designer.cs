@@ -11,8 +11,8 @@ using chronovault_api.Infra.Data;
 namespace chronovault_api.Migrations
 {
     [DbContext(typeof(ChronovaultDbContext))]
-    [Migration("20250615213534_database-initial-migration")]
-    partial class databaseinitialmigration
+    [Migration("20250720222449_Adding-nullables")]
+    partial class Addingnullables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,52 +20,28 @@ namespace chronovault_api.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.5");
 
-            modelBuilder.Entity("chronovault_api.Models.Image", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Images");
-                });
-
             modelBuilder.Entity("chronovault_api.Models.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("CardholderName")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("DiscountAmount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int?>("ExpiryMonth")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("Notes")
-                        .IsRequired()
+                    b.Property<int?>("ExpiryYear")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("InstallmentCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("LastFourDigits")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("OrderNumber")
@@ -82,14 +58,11 @@ namespace chronovault_api.Migrations
                     b.Property<int>("PaymentStatus")
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("ShippingCost")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("PaymentToken")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("TaxAmount")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
@@ -117,9 +90,6 @@ namespace chronovault_api.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("DiscountAmount")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("OrderId")
                         .HasColumnType("INTEGER");
@@ -171,6 +141,10 @@ namespace chronovault_api.Migrations
                     b.Property<int?>("Gender")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Images")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
 
@@ -187,9 +161,6 @@ namespace chronovault_api.Migrations
 
                     b.Property<int?>("MovementType")
                         .HasColumnType("INTEGER");
-
-                    b.Property<decimal?>("OriginalPrice")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -221,16 +192,11 @@ namespace chronovault_api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("AcceptsNewsletter")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("AcceptsPromotions")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("BirthDate")
+                    b.Property<DateOnly>("BirthDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CPF")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
@@ -241,34 +207,14 @@ namespace chronovault_api.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("LastLogin")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal?>("MaximumPriceRange")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("MinimumPriceRange")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Phone")
+                        .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<string>("PreferredBrand")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("PreferredGender")
-                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
@@ -288,34 +234,23 @@ namespace chronovault_api.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<byte[]>("PasswordHash")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("BLOB");
+                        .HasColumnType("TEXT");
 
-                    b.Property<byte[]>("PasswordSalt")
+                    b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("BLOB");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("UserId");
 
                     b.ToTable("UserCredentials");
                 });
 
-            modelBuilder.Entity("chronovault_api.Models.Image", b =>
-                {
-                    b.HasOne("chronovault_api.Models.Product", "Product")
-                        .WithMany("Images")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("chronovault_api.Models.Order", b =>
                 {
                     b.HasOne("chronovault_api.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -330,9 +265,15 @@ namespace chronovault_api.Migrations
                                 .HasMaxLength(100)
                                 .HasColumnType("TEXT");
 
+                            b1.Property<string>("Complement")
+                                .HasColumnType("TEXT");
+
                             b1.Property<string>("Country")
                                 .IsRequired()
                                 .HasMaxLength(50)
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Number")
                                 .HasColumnType("TEXT");
 
                             b1.Property<string>("State")
@@ -395,9 +336,15 @@ namespace chronovault_api.Migrations
                                 .HasMaxLength(100)
                                 .HasColumnType("TEXT");
 
+                            b1.Property<string>("Complement")
+                                .HasColumnType("TEXT");
+
                             b1.Property<string>("Country")
                                 .IsRequired()
                                 .HasMaxLength(50)
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Number")
                                 .HasColumnType("TEXT");
 
                             b1.Property<string>("State")
@@ -422,7 +369,8 @@ namespace chronovault_api.Migrations
                                 .HasForeignKey("UserId");
                         });
 
-                    b.Navigation("Address");
+                    b.Navigation("Address")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("chronovault_api.Models.UserCredential", b =>
@@ -441,9 +389,9 @@ namespace chronovault_api.Migrations
                     b.Navigation("OrderItems");
                 });
 
-            modelBuilder.Entity("chronovault_api.Models.Product", b =>
+            modelBuilder.Entity("chronovault_api.Models.User", b =>
                 {
-                    b.Navigation("Images");
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }
