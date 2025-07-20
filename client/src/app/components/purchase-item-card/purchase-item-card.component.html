@@ -6,9 +6,14 @@
     <div class="purchase-item-info-row">
       <p class="purchase-item-model">{{ purchaseItem.item.model }}</p>
 
-      <button mat-icon-button class="remove-from-cart-btn" (click)="removeItemFromCart()">
+      @if(showRemoveButton) {
+       <button mat-icon-button class="remove-from-cart-btn" (click)="removeItemFromCart()">
         <mat-icon class="material-icons">close</mat-icon>
       </button>
+      } @else{
+        <button mat-icon-button class="remove-from-cart-btn" disabled>
+        </button>
+      }
     </div>
 
     <div class="purchase-item-info-row">

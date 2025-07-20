@@ -14,6 +14,7 @@ import { CartService } from '../../shared/services';
 })
 export class PurchaseItemCardComponent {
   @Input("purchaseItem") purchaseItem: PurchaseItemModel | null = null;
+  @Input("showRemoveButton") showRemoveButton: boolean = true;
 
   constructor(private cartService: CartService){
 

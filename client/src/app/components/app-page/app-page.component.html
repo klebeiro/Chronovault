@@ -5,9 +5,9 @@
   
   <mat-drawer-content>
     <main>
-      <app-navbar />
+      <app-navbar [fixedElementsMarginActive]="fixedElementsMarginActive" />
       <ng-content></ng-content>
-      <app-footer />
+      <app-footer  [fixedElementsMarginActive]="fixedElementsMarginActive"/>
     </main>
   </mat-drawer-content>
 </mat-drawer-container>

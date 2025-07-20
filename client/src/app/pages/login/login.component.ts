@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {
   FormBuilder,
@@ -33,7 +32,6 @@ interface LoginForm {
     RouterModule,
     CommonModule,
     ReactiveFormsModule,
-    HttpClientModule,
     FormsModule,
     MatButtonModule,
     SharedModule,
@@ -93,7 +91,6 @@ export class LoginComponent implements OnInit {
     }
 
     const formData = this.loginForm.value;
-
     this.isLoading = true;
 
     this.authService
@@ -103,7 +100,7 @@ export class LoginComponent implements OnInit {
       })
       .subscribe({
         next: (data) => {
-          this.navigateToNextPage(data);
+          this.signIn(data);
         },
         error: (error) => {
           this.notificationService.showErrorNotification({
@@ -118,7 +115,23 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  navigateToNextPage(loginOutputDTO: LoginOutputDTO){
+  signIn(loginOutputDTO: LoginOutputDTO){
+    this.authService.setAuthCredentials({
+      token: loginOutputDTO.token,
+      user: {
+        id: loginOutputDTO.id,
+        email: loginOutputDTO.email,
+        name: loginOutputDTO.name,
+        address: {
+          street: loginOutputDTO.address.street,
+          addressNumber: loginOutputDTO.address.addressNumber,
+          city: loginOutputDTO.address.city,
+          state: loginOutputDTO.address.state,
+          zipCode: loginOutputDTO.address.zipCode,
+        }
+      }
+    })
+
     if(this.cartService.cartIsEmpty()){
       this.router.navigate(['/']);
     } else {

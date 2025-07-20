@@ -56,7 +56,7 @@
         <div class="action-buttons-container">
           <button mat-flat-button color="primary" (click)="goToCheckout()" class="buy-button" aria-label="Comprar">
             <mat-icon class="material-icons">shopping_bag</mat-icon>
-            Comprar
+            {{ isInCart ? 'Ir para o carrinho' : 'Comprar' }}
           </button>
 
           <button mat-flat-button color="primary" (click)="addRemoveItemCart()">

@@ -1,0 +1,13 @@
+.content-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem;
+
+  h2 {
+    text-align: left;
+    font-weight: bold;
+    font-size: 1.6rem;
+    margin-bottom: 2rem;
+    color: #b07e1d;
+  }
+}

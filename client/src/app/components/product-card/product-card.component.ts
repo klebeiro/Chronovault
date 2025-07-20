@@ -1,15 +1,15 @@
 import { Component, Input } from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
 import { CurrencyPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
+
 import { SharedModule } from '../../shared';
 import { CompactWatchModel } from '../../models';
 import { CartService } from '../../shared/services';
 
 @Component({
   selector: 'app-product-card',
-  imports: [NgOptimizedImage, CurrencyPipe, MatIconModule, SharedModule],
+  imports: [CurrencyPipe, MatIconModule, SharedModule],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.css'
 })
