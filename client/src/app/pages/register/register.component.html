@@ -3,10 +3,10 @@
     <h2>Crie sua conta</h2>
 
     <mat-stepper #stepper linear class="stepper">
-      <mat-step [stepControl]="userInfoForm" errorMessage="Dados inicias inválidos">
+      <mat-step [stepControl]="userInfoForm" errorMessage="Dados do usuário inválidos">
         <ng-template matStepLabel>Dados pessoais</ng-template>
 
-        <form class="form" [formGroup]="userInfoForm" (ngSubmit)="onSubmit()">
+        <form class="form" [formGroup]="userInfoForm" (ngSubmit)="submitUserInfoForm()">
           <div class="form-inputs">
             <app-input [formControl]="getFormControl('name')" [inputType]="'text'" [inputId]="'name'"
               [inputPlaceholder]="'Informe seu nome'" [label]="'Nome'">
@@ -36,10 +36,10 @@
         </form>
       </mat-step>
 
-      <mat-step [stepControl]="addressForm" errorMessage="Dados inicias inválidos">
+      <mat-step [stepControl]="addressForm" errorMessage="Dados do endereço inválidos">
         <ng-template matStepLabel>Endereço</ng-template>
 
-        <form class="form" [formGroup]="addressForm" (ngSubmit)="onSubmit()">
+        <form class="form" [formGroup]="addressForm" (ngSubmit)="registerUser()">
           <div class="form-inputs">
             <app-input [formControl]="getFormControl('zipCode')" [inputType]="'text'" [inputId]="'CEP'"
               [inputPlaceholder]="'Informe o CEP'" [label]="'CEP'" [mask]="getZipCodeMask()">

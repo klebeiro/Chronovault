@@ -15,6 +15,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { routes } from './app.routes';
 
 import { authInterceptor } from './shared/interceptors';
+import { WebServiceConfigService } from './shared/services';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -33,5 +34,9 @@ export const appConfig: ApplicationConfig = {
       provide: STEPPER_GLOBAL_OPTIONS,
       useValue: { showError: true },
     },
+    {
+      provide: WebServiceConfigService,
+      useClass: WebServiceConfigService,
+    }
   ],
 };

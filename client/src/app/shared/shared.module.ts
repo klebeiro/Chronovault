@@ -12,7 +12,10 @@ import {
   AppLoadingIndicatorComponent,
   AppSelectComponent,
 } from './components';
-import { ClickStopPropagationDirective } from './directives';
+import {
+  BaseComponentActionDirective,
+  ClickStopPropagationDirective,
+} from './directives';
 import { CartService } from './services';
 
 @NgModule({
@@ -24,7 +27,7 @@ import { CartService } from './services';
     NgxMaskDirective,
     MatProgressSpinnerModule,
     ClickStopPropagationDirective,
-    CommonModule
+    CommonModule,
   ],
   declarations: [
     AppInputComponent,
@@ -35,7 +38,7 @@ import { CartService } from './services';
     AppInputComponent,
     AppSelectComponent,
     ClickStopPropagationDirective,
-    AppLoadingIndicatorComponent
+    AppLoadingIndicatorComponent,
   ],
   providers: [provideNgxMask()],
 })

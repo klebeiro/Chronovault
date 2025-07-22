@@ -8,7 +8,7 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  Validators
+  Validators,
 } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -18,8 +18,9 @@ import { AuthPageComponent } from '../../components';
 import { SharedModule } from '../../shared/shared.module';
 
 import { AuthService } from '../../services';
-import { CartService, NotificationService } from '../../shared/services';
-import { LoginOutputDTO } from '../../dto/auth';
+import { CartService } from '../../shared/services';
+import { LoginInputDTO, LoginOutputDTO } from '../../dto/auth';
+import { BaseComponentActionDirective } from '../../shared/directives';
 
 interface LoginForm {
   email: FormControl<string>;
@@ -36,37 +37,32 @@ interface LoginForm {
     MatButtonModule,
     SharedModule,
     AuthPageComponent,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent
+  extends BaseComponentActionDirective
+  implements OnInit
+{
   loginForm!: FormGroup<LoginForm>;
 
   mode: 'login' | 'register' | 'recover' | 'change-password' = 'login';
   path: string | undefined = '';
 
-  isLoading: boolean = false;
-
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private notificationService: NotificationService,
     private router: Router,
     private cartService: CartService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.setLoginForm();
   }
-
-  form = {
-    email: '',
-    confirmEmail: '',
-    password: '',
-    confirmPassword: '',
-  };
 
   setLoginForm() {
     this.loginForm = this.fb.nonNullable.group<LoginForm>({
@@ -91,31 +87,21 @@ export class LoginComponent implements OnInit {
     }
 
     const formData = this.loginForm.value;
-    this.isLoading = true;
 
-    this.authService
-      .login({
+    this.executeActionWithInputAndOutput<LoginInputDTO, LoginOutputDTO>({
+      input: {
         email: formData.email!,
         password: formData.password!,
-      })
-      .subscribe({
-        next: (data) => {
-          this.signIn(data);
-        },
-        error: (error) => {
-          this.notificationService.showErrorNotification({
-            title: 'Erro ao fazer login',
-            description: error.error,
-          });
-          this.isLoading = false;
-        },
-        complete: () => {
-          this.isLoading = false;
-        }
-      });
+      },
+      actionMethod: this.authService.login.bind(this.authService),
+      displayErrorNotification: true,
+      onSucess: (loginOutputDTO) => this.signIn(loginOutputDTO),
+      errorMessage: 'Erro ao fazer login',
+    });
   }
 
-  signIn(loginOutputDTO: LoginOutputDTO){
+
+  signIn(loginOutputDTO: LoginOutputDTO) {
     this.authService.setAuthCredentials({
       token: loginOutputDTO.token,
       user: {
@@ -128,11 +114,11 @@ export class LoginComponent implements OnInit {
           city: loginOutputDTO.address.city,
           state: loginOutputDTO.address.state,
           zipCode: loginOutputDTO.address.zipCode,
-        }
-      }
-    })
+        },
+      },
+    });
 
-    if(this.cartService.cartIsEmpty()){
+    if (this.cartService.cartIsEmpty()) {
       this.router.navigate(['/']);
     } else {
       this.router.navigate(['/checkout']);
