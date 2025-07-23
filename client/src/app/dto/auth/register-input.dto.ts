@@ -6,8 +6,10 @@ export interface RegisterInputDTO {
   address: {
     street: string;
     addressNumber: string;
+    neighborhood: string;
     city: string;
     state: string;
     zipCode: string;
+    complement: string | null;
   };
 }

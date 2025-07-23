@@ -26,9 +26,11 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class SelectPaymentMethodComponent {
   @Input('paymentCardForm') paymentCardForm: PaymentCardFormGroup | null = null;
-  @Input('selectedPaymentType') selectedPaymenType: PaymentTypeEnum = PaymentTypeEnum.DebitCard;
-  @Output("onSubmitValidForm") onSubmitValidForm = new EventEmitter<void>();
-  @Output("changeSelectedPaymentMethod") onChangeSelectedPaymentMethod = new EventEmitter<PaymentTypeEnum>();
+  @Input('selectedPaymentType') selectedPaymenType: PaymentTypeEnum =
+    PaymentTypeEnum.DebitCard;
+  @Output('onSubmitValidForm') onSubmitValidForm = new EventEmitter<void>();
+  @Output('changeSelectedPaymentMethod') onChangeSelectedPaymentMethod =
+    new EventEmitter<PaymentTypeEnum>();
 
   paymentTypeOptions: PaymentTypeOption[] = PAYMENT_TYPE_OPTIONS;
 
@@ -51,15 +53,19 @@ export class SelectPaymentMethodComponent {
     return this.selectedPaymenType === PaymentTypeEnum.Pix;
   }
 
-  emitOnSubmitValidForm(){
-    if(this.getIsCardPayment() && !this.getIsValidPaymentCardForm()) {
+  emitOnSubmitValidForm() {
+    if (this.getIsCardPayment() && !this.getIsValidPaymentCardForm()) {
       return;
-    };
-    
+    }
+
     this.onSubmitValidForm.emit();
   }
 
-  getIsValidPaymentCardForm(){
-    return this.getIsCardPayment() && this.paymentCardForm !== null && this.paymentCardForm.valid
+  getIsValidPaymentCardForm() {
+    return (
+      this.getIsCardPayment() &&
+      this.paymentCardForm !== null &&
+      this.paymentCardForm.valid
+    );
   }
 }

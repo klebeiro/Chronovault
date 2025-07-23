@@ -1,8 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 
-import { LoginInputDTO, LoginOutputDTO, RegisterInputDTO } from '../dto/auth';
+import {
+  ApiLoginInputDTO,
+  ApiLoginOutputDTO,
+  ApiRegisterInputDTO,
+  LoginInputDTO,
+  LoginOutputDTO,
+  RegisterInputDTO,
+} from '../dto/auth';
 import { WebServiceConfigService } from '../shared/services';
 import { AuthCredentialsModel, UserModel } from '../models';
 
@@ -20,38 +27,56 @@ export class AuthService {
 
   public login(input: LoginInputDTO): Observable<LoginOutputDTO> {
     const completeApiUrl =
-      this.webServiceConfigService.getCompleteApiUrl('/auth/login');
+      this.webServiceConfigService.getCompleteApiUrl('User/login');
 
-    // return this.httpClient.post<LoginOutputDTO>(completeApiUrl, {
-    //   email: input.email,
-    //   password: input.password,
-    // });
+    const requestBody: ApiLoginInputDTO = {
+      email: input.email,
+      password: input.password,
+    };
 
-    // simulate login
-    return new Observable<LoginOutputDTO>((observer) => {
-      observer.next({
-        id: 1,
-        email: input.email,
-        name: 'John Doe',
-        token: 'token',
-        address: {
-          addressNumber: '123',
-          city: 'City',
-          state: 'State',
-          street: 'Street',
-          zipCode: '12345',
-        },
-      });
-    });
+    return this.httpClient.post<ApiLoginOutputDTO>(completeApiUrl, requestBody).pipe(
+      map<ApiLoginOutputDTO, LoginOutputDTO>((apiResponse) => {
+        return {
+          id: apiResponse.user.id,
+          email: apiResponse.user.email,
+          name: apiResponse.user.name,
+          token: apiResponse.token,
+          address: {
+            addressNumber: apiResponse.user.address.number,
+            city: apiResponse.user.address.city,
+            state: apiResponse.user.address.state,
+            street: apiResponse.user.address.street,
+            zipCode: apiResponse.user.address.zipCode,
+          }
+        }
+      })
+    );
   }
 
   public register(input: RegisterInputDTO): Observable<void> {
     const completeApiUrl =
-      this.webServiceConfigService.getCompleteApiUrl('/auth/register');
+      this.webServiceConfigService.getCompleteApiUrl('User/create');
 
-    return new Observable((observer) => {
-      observer.next();
-    });
+    const requestBody: ApiRegisterInputDTO = {
+      name: input.name,
+      email: input.email,
+      password: input.password,
+      birthDate: '2023-01-01',
+      cpf: '12345678901',
+      passwordConfirmation: input.confirmPassword,
+      phone: '88992146067',
+      address: {
+        city: input.address.city,
+        complement: input.address.complement,
+        country: '',
+        number: input.address.addressNumber,
+        state: input.address.state,
+        street: input.address.street,
+        zipCode: input.address.zipCode,
+      },
+    };
+
+    return this.httpClient.post<void>(completeApiUrl, requestBody);
   }
 
   public setAuthCredentials(credentials: AuthCredentialsModel) {

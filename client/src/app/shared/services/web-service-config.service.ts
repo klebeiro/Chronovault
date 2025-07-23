@@ -9,7 +9,7 @@ export class WebServiceConfigService {
   constructor() { }
 
   public getApiUrl(): string {
-    return environment.apiURL;
+    return environment.apiURL + "/";
   }
 
   public getCompleteApiUrl(url: string): string {

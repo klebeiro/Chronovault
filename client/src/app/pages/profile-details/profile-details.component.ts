@@ -17,15 +17,12 @@ import { SharedModule } from '../../shared';
 import { StateModel } from '../../models';
 import { AuthService } from '../../services';
 import { brazillianStates } from '../../shared/constants';
-import { NotificationService } from '../../shared/services';
 import { SelectOption } from '../../shared/types';
 import { mask } from '../../shared/utils';
 
 interface UserInfoForm {
   name: FormControl<string>;
   email: FormControl<string>;
-  password: FormControl<string>;
-  confirmPassword: FormControl<string>;
 }
 
 interface AddressForm {
@@ -64,14 +61,14 @@ export class ProfileDetailsComponent {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
-    private notificationService: NotificationService
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.setUserInfoForm();
     this.setAddressForm();
     this.setStates();
+    this.subscribeToAuthCredentialsChange();
   }
 
   setStates() {
@@ -89,14 +86,6 @@ export class ProfileDetailsComponent {
         validators: [Validators.required],
       }),
       email: this.fb.control('', {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      password: this.fb.control('', {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      confirmPassword: this.fb.control('', {
         nonNullable: true,
         validators: [Validators.required],
       }),
@@ -142,5 +131,28 @@ export class ProfileDetailsComponent {
 
   getZipCodeMask() {
     return mask.zipCode;
+  }
+
+  subscribeToAuthCredentialsChange(){
+    this.authService.getAuthCredentials$().subscribe((credentials) => {
+      if (credentials) {
+        console.log('credentials', credentials);
+
+        this.userInfoForm.patchValue({
+          name: credentials.user.name,
+          email: credentials.user.email
+        });
+
+        this.addressForm.patchValue({
+          zipCode: credentials.user.address.zipCode,
+          street: credentials.user.address.street,
+          number: credentials.user.address.addressNumber,
+          neighborhood: '',
+          city: credentials.user.address.city,
+          state: credentials.user.address.state,
+          complement: ''
+        });
+      }
+    });
   }
 }

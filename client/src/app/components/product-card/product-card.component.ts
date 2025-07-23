@@ -30,8 +30,6 @@ export class ProductCardComponent {
   }
 
   clickCartButton() {
-    console.log('product', this.product);
-
     if(this.cartService.getIsItemInCart(this.product.id)){
       this.cartService.removeItemFromCart(this.product.id);
       return;

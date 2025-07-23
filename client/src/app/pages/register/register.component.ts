@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {
   FormBuilder,
@@ -19,13 +18,13 @@ import { AuthPageComponent } from '../../components';
 import { SharedModule } from '../../shared/shared.module';
 
 import { AuthService } from '../../services';
-import { NotificationService } from '../../shared/services';
-import { MatStep, MatStepperModule } from '@angular/material/stepper';
+import { MatStep, MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { mask } from '../../shared/utils';
 import { StateModel } from '../../models';
 import { brazillianStates } from '../../shared/constants';
 import { SelectOption } from '../../shared/types';
-import { filter } from 'rxjs';
+import { BaseComponentActionDirective } from '../../shared/directives';
+import { RegisterInputDTO } from '../../dto/auth';
 
 interface UserInfoForm {
   name: FormControl<string>;
@@ -40,7 +39,7 @@ interface AddressForm {
   number: FormControl<string>;
   neighborhood: FormControl<string>;
   city: FormControl<string>;
-  state: FormControl<string | null>;
+  state: FormControl<StateModel | null>;
   complement: FormControl<string | null>;
 }
 
@@ -61,18 +60,22 @@ interface AddressForm {
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent
+  extends BaseComponentActionDirective
+  implements OnInit
+{
   userInfoForm!: FormGroup<UserInfoForm>;
   addressForm!: FormGroup<AddressForm>;
   stateOptions: SelectOption<StateModel>[] = [];
-
-  isLoading: boolean = false;
+  @ViewChild('stepper') stepper: MatStepper | null = null;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private notificationService: NotificationService,
-  ) {}
+    private router: Router
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.setUserInfoForm();
@@ -150,31 +153,55 @@ export class RegisterComponent implements OnInit {
     return mask.zipCode;
   }
 
-  onSubmit() {
-    if (!this.userInfoForm.valid) {
+  submitUserInfoForm() {
+    if(this.userInfoForm.valid && this.stepper) {
+      this.stepper.next();
+    }
+  }
+
+  registerUser() {
+    if (!this.userInfoForm.valid || !this.addressForm.valid) {
+      this.showErrorNotification({
+        title: 'Erro ao fazer cadastro',
+        description: 'Preencha todos os campos',
+      });
+
       return;
     }
 
-    const formData = this.userInfoForm.value;
-    this.isLoading = true;
+    const userFormInfo = this.userInfoForm.value;
+    const addressFormInfo = this.addressForm.value;
 
-    this.authService
-      .login({
-        email: formData.email!,
-        password: formData.password!,
-      })
-      .subscribe({
-        next: (data) => {
-          console.log('data');
-          this.isLoading = false;
-        },
-        error: (error) => {
-          this.notificationService.showErrorNotification({
-            title: 'Erro ao fazer login',
-            description: error.error,
-          });
-          this.isLoading = false;
-        },
-      });
+    const registerInput: RegisterInputDTO = {
+      name: userFormInfo.name!,
+      email: userFormInfo.email!,
+      password: userFormInfo.password!,
+      confirmPassword: userFormInfo.confirmPassword!,
+      address: {
+        zipCode: addressFormInfo.zipCode!,
+        street: addressFormInfo.street!,
+        addressNumber: addressFormInfo.number!,
+        neighborhood: addressFormInfo.neighborhood!,
+        city: addressFormInfo.city!,
+        state: addressFormInfo.state?.abbreviation!,
+        complement: addressFormInfo.complement || null,
+      },
+    };
+
+    console.log('Regioster: ', registerInput);
+
+    this.executeActionWithInput<RegisterInputDTO>({
+      actionMethod: this.authService.register.bind(this.authService),
+      displayErrorNotification: true,
+      errorMessage: 'Erro ao fazer cadastro',
+      input: registerInput,
+      onSucess: () => {
+        this.showSuccessNotification({
+          title: 'Cadastro realizado com sucesso',
+          description: 'Faça login para continuar',
+        })
+        this.router.navigate(['/login']);
+      },
+    });
   }
 }

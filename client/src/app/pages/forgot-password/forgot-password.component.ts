@@ -128,7 +128,6 @@ export class ForgotPasswordComponent {
       })
       .subscribe({
         next: (data) => {
-          console.log('data');
           this.isLoading = false;
         },
         error: (error) => {

@@ -16,9 +16,9 @@
           [inputPlaceholder]="'Informe o CEP'" [label]="'CEP'" [mask]="getZipCodeMask()">
         </app-input>
 
-        <app-select [formControl]="getFormControl('state')" [selectId]="'state'"
-          [selectPlaceholder]="'Informe o estado'" [options]="stateOptions" [label]="'Selecione seu estado'">
-        </app-select>
+        <app-input [formControl]="getFormControl('state')" [inputType]="'text'" [inputId]="'state'"
+          [inputPlaceholder]="'Informe o estado'" [label]="'Estado'">
+        </app-input>
 
         <app-input [formControl]="getFormControl('city')" [inputType]="'text'" [inputId]="'city'"
           [inputPlaceholder]="'Informe a cidade'" [label]="'Cidade'">

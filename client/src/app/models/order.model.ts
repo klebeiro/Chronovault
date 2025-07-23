@@ -1,6 +1,7 @@
 export interface OrderModel {
   id: number;
   date: Date;
+  orderNumber: string;
   items: OrderItemModel[];
   total: number;
 }

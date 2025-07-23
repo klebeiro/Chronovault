@@ -6,4 +6,5 @@ export type { UserModel } from './user.model';
 export type { AuthCredentialsModel } from './auth-credentials.model';
 export type { OrderModel, OrderItemModel } from './order.model';
 export type { OrderDetailsModel } from './order-details.model';
+export type { PaymentMethodModel } from './payment-method.model';
 

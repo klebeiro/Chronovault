@@ -9,11 +9,10 @@ import {
   WaterResistanceEnum,
 } from '../shared/enums';
 import { CompactWatchModel, WatchDetailsModel } from '../models';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { WebServiceConfigService } from '../shared/services';
-import { MostViewedWatchOutputDTO } from '../dto/watches';
-import { MOCK_WATCHES } from '../shared/constants';
+import { ApiWatchOutputDTO } from '../dto/watches';
 
 @Injectable({
   providedIn: 'root',
@@ -172,83 +171,73 @@ export class WatchService {
   }
 
   getWatchById(id: number): Observable<WatchDetailsModel> {
-    const fakeImages = [
-      'https://xelorwatches.com/wp-content/uploads/2023/09/PATEK-PHILIPPE-NAUTILUS-%E2%80%93-57111A-001-%E2%80%93-STEEL-40mm.png',
-      'https://th.bing.com/th/id/OIP.s-fAAGrOYb0g7m2pjyygawHaHa?cb=iwc2&rs=1&pid=ImgDetMain',
-    ];
+    const completeApiUrl = this.webServiceConfigService.getCompleteApiUrl(
+      `Product/${id}/details`
+    );
 
-    return new Observable<WatchDetailsModel>((observer) => {
-      setTimeout(() => {
-        const watchDetails = MOCK_WATCHES.find(
-          (watch) => watch.id === id
-        )
-
-        if(!watchDetails) {
-          observer.error(new Error('Watch not found'));
-          return;
-        }
-
-        observer.next(watchDetails);
-        observer.complete();
-      }, 1000);
-    });
+    return this.httpClient.get<ApiWatchOutputDTO>(completeApiUrl).pipe(
+      map<ApiWatchOutputDTO, WatchDetailsModel>((apiWatchOutputDto) => {
+        return this.mapApiWatchOutputDtoToWatchDetailsModel(apiWatchOutputDto);
+      })
+    );
   }
 
   getMostViewedWaches(): Observable<CompactWatchModel[]> {
     const completeApiUrl = this.webServiceConfigService.getCompleteApiUrl(
-      '/products/most-viewed'
+      'Product/get-all'
     );
 
-    const fakeImages = [
-      'https://xelorwatches.com/wp-content/uploads/2023/09/PATEK-PHILIPPE-NAUTILUS-%E2%80%93-57111A-001-%E2%80%93-STEEL-40mm.png',
-      'https://th.bing.com/th/id/OIP.s-fAAGrOYb0g7m2pjyygawHaHa?cb=iwc2&rs=1&pid=ImgDetMain',
-    ];
-
-    const mostViewedProductOutputDtos: MostViewedWatchOutputDTO[] = MOCK_WATCHES.map(
-      (product) => ({
-        id: product.id,
-        model: product.model,
-        brand: product.brand,
-        price: product.price,
-        imagesUrls: product.images.map((image) => image.url),
+    return this.httpClient.get<ApiWatchOutputDTO[]>(completeApiUrl).pipe(
+      map<ApiWatchOutputDTO[], CompactWatchModel[]>((mostViewedWatchOutputDtos) => {
+        return mostViewedWatchOutputDtos.map((mostViewedWatchOutputDto) => {
+          return this.mapApiWatchOutputDtoToCompactWatchModel(
+            mostViewedWatchOutputDto
+          );
+        });
       })
-    )
-
-    const mostViewProducts: CompactWatchModel[] =
-      mostViewedProductOutputDtos.map((product) => ({
-        id: product.id,
-        model: product.model,
-        brand: product.brand,
-        price: product.price,
-        imagesUrls: product.imagesUrls,
-      }));
-
-    // return this.httpClient.get<Product[]>(completeApiUrl).pipe(
-    //   map((products) => {
-    //     return products.map((product) =>
-    //       this.mapMostViewedProductOutputDtoToProduct(product)
-    //     );
-    //   })
-    // );
-
-    // simulate api call
-    return new Observable((observer) => {
-      setTimeout(() => {
-        observer.next(mostViewProducts);
-        observer.complete();
-      }, 3000);
-    });
+    );
   }
 
-  private mapMostViewedWatchOutputDtoToCompactWatchModel(
-    mostViewedWatchOutputDto: MostViewedWatchOutputDTO
+  private mapApiWatchOutputDtoToCompactWatchModel(
+    apiWatchOutputDto: ApiWatchOutputDTO
   ): CompactWatchModel {
     return {
-      id: mostViewedWatchOutputDto.id,
-      model: mostViewedWatchOutputDto.model,
-      brand: mostViewedWatchOutputDto.brand,
-      price: mostViewedWatchOutputDto.price,
-      imagesUrls: mostViewedWatchOutputDto.imagesUrls,
+      id: apiWatchOutputDto.id,
+      model: apiWatchOutputDto.model,
+      brand: apiWatchOutputDto.brand,
+      price: apiWatchOutputDto.price,
+      imagesUrls: apiWatchOutputDto.images
+    };
+  }
+
+  private mapApiWatchOutputDtoToWatchDetailsModel(
+    apiWatchOutputDto: ApiWatchOutputDTO
+  ): WatchDetailsModel {
+    return {
+      id: apiWatchOutputDto.id,
+      model: apiWatchOutputDto.model,
+      brand: apiWatchOutputDto.brand,
+      price: apiWatchOutputDto.price,
+      
+      description: apiWatchOutputDto.description,
+      caseMaterial: CaseMaterialEnum.Aluminum,
+      category: WatchCategoryEnum.Sport,
+      gender: ProductGenderEnum.Male,
+      images: apiWatchOutputDto.images.map((image, index) => {
+        return {
+          id: index,
+          url: image,
+          order: index,
+        };
+      }),
+      isActive: apiWatchOutputDto.isActive,
+      isFeatured: apiWatchOutputDto.isFeatured,
+      isOnSale: apiWatchOutputDto.isOnSale,
+      movementType: MovementTypeEnum.Automatic,
+      stockQuantity: apiWatchOutputDto.stockQuantity,
+      strapMaterial: StrapMaterialEnum.Leather,
+      warranty: null,
+      waterResistance: WaterResistanceEnum.None
     };
   }
 }

@@ -12,7 +12,7 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) 
   }
 
   const newReq = req.clone({
-    headers: req.headers.append('X-Authentication-Token', authCredentials.token),
+    headers: req.headers.append('Authorization', `Bearer ${authCredentials.token}`),
   });
 
   return next(newReq);
