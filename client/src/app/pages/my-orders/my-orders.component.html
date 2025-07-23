@@ -1,42 +1,50 @@
 <div class="content-container">
   <h2>Meus Pedidos</h2>
 
-  @if (orders.length === 0){
-  <p>Voce ainda nao possui nenhum pedido.</p>
-  }
-
-  @for(order of orders; track order.id){
-  <div class="order-container info-surface">
-    <div class="order-header">
-      <p class="order-id">Pedido #{{ order.id }}</p>
-      <p class="order-date">Data: {{ order.date | date:'dd/MM/yyyy' }}</p>
+  @if(isLoading){
+    <div class="loading-container">
+      <mat-spinner color="#b07e1d" diameter="24"></mat-spinner>
     </div>
-
-    <div class="order-items">
-      @for(item of order.items; track item.id){
-      <div class="order-subtotals">
-        <p class="order-item-description">
-          {{ item.quantity }}x - {{ item.description }}
-        </p>
-        <p class="order-item-price">
-          {{ item.quantity }}x {{ item.unitPrice | currency:'EUR':'symbol':'1.2-2' }} = {{ item.quantity *
-          item.unitPrice | currency:'EUR':'symbol':'1.2-2' }}
-        </p>
-      </div>
+  } @else{
+      @if (orders.length === 0){
+        <p>Voce ainda nao possui nenhum pedido.</p>
       }
-    </div>
 
-    <div class="order-card-footer">
+      @for(order of orders; track order.id){
+        <div class="order-container info-surface">
+          <div class="order-header">
+            <p class="order-id">Pedido #{{ order.orderNumber }}</p>
+            <p class="order-date">Data: {{ order.date | date:'dd/MM/yyyy' }}</p>
+          </div>
 
-      <p class="order-total-price">
-        Total Final: <strong>{{ 100 | currency:'EUR':'symbol':'1.2-2' }}</strong>
-      </p>
+          <div class="order-items">
+            @for(item of order.items; track item.id){
+            <div class="order-subtotals">
+              <p class="order-item-description">
+                {{ item.quantity }}x - {{ item.description }}
+              </p>
+              <p class="order-item-price">
+                {{ item.quantity }}x {{ item.unitPrice | currency:'BRL':'symbol':'1.2-2' }} = {{ item.quantity *
+                item.unitPrice | currency:'BRL':'symbol':'1.2-2' }}
+              </p>
+            </div>
+            }
+          </div>
 
-      <button mat-button color="primary" (click)="goToOrderDetails(order.id)">Ver detalhes</button>
+          <div class="order-card-footer">
 
-    </div>
+            <p class="order-total-price">
+              Total Final: <strong>{{ 100 | currency:'BRL':'symbol':'1.2-2' }}</strong>
+            </p>
+
+            <button mat-button color="primary" (click)="goToOrderDetails(order.id)">Ver detalhes</button>
+
+          </div>
 
 
-  </div>
+        </div>
+      }
   }
+
+
 </div>

@@ -27,4 +27,12 @@ export class PurchaseItemCardComponent {
 
     this.cartService.removeItemFromCart(this.purchaseItem.item.id);
   }
+
+  getTotalPrice() {
+    if(!this.purchaseItem) {
+      return 0;
+    }
+
+    return this.purchaseItem.item.price * this.purchaseItem.quantity;
+  }
 }

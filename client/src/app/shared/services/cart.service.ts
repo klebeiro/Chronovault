@@ -52,5 +52,15 @@ export class CartService {
     return this.cart.getValue().items.length === 0;
   }
 
-  
+  getTotalPrice(): number {
+    return this.cart.getValue().items.reduce((total, item) => total + item.item.price * item.quantity, 0);
+  }
+
+  getCartItems(): PurchaseItemModel[] {
+    return this.cart.getValue().items;
+  }
+
+  clearCart() {
+    this.cart.next({ items: [] });
+  }
 }

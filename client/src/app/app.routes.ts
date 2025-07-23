@@ -18,7 +18,7 @@ export const routes: Routes = [
   { path: 'recover', component: LoginComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'product/:id', component: ProductDetailsComponent },
-  { path: 'checkout', component: CheckoutComponent },
+  { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },
   {
     path: 'profile',
     component: ProfileComponent,

@@ -1,59 +1,76 @@
 <div class="content-container">
-  <h2>Detalhes do pedido #1</h2>
+  <h2>Detalhes do pedido</h2>
 
-  <div class="details-section">
-
-
-    <p class="section-title">Itens do pedido:</p>
-
-    <div class="purchase-items">
-      @for(purchaseItem of purchaseItems; track purchaseItem.item.id) {
-      <purchase-item-card [purchaseItem]="purchaseItem" [showRemoveButton]="false"></purchase-item-card>
-      }
-
-      <div class="total-price-container info-surface">
-        <p class="total-price-label">Total Final</p>
-
-        <div class="total-price-value-container">
-          <strong class="total-price-value">{{ 1000 | currency:'EUR':'symbol':'1.2-2' }}</strong>
-          <sub>(10x de {{ 1000 / 10 | currency:'EUR':'symbol':'1.2-2' }})</sub>
-        </div>
-      </div>
+  @if(isLoading){
+    <div class="loading-container">
+      <mat-spinner color="#b07e1d" diameter="24"></mat-spinner>
     </div>
-  </div>
+  } @else {
+    @if(orderDetails !== null){
+        <div class="details-section">
+          <p class="section-title">Itens do pedido:</p>
 
+          <div class="purchase-items">
+            @for(purchaseItem of orderDetails.items; track purchaseItem.item.id) {
+              <purchase-item-card
+                  [purchaseItem]="purchaseItem"
+                  [showRemoveButton]="false"
+              >
+              </purchase-item-card>
+            }
 
-  <div class="details-section">
-    <p class="section-title">Forma de pagamento:</p>
+            <div class="total-price-container info-surface">
+              <p class="total-price-label">Total Final</p>
 
-    <div class="payment-method-card">
-      <div class="payment-method-description info-surface">
-        <div class="payment-method-header">
-          <mat-icon class="material-icons">credit_card</mat-icon>
-          <p class="payment-method-card-text">Cartão de crédito</p>
-        </div>
-
-        <div class="payment-card-description">
-          <div class="card-info">
-            <p class="card-info-label">Nome:</p>
-            <span class="card-info-value">Nome do fulano de tal</span>
-          </div>
-
-          <div class="card-info">
-            <p class="card-info-label">Cartão:</p>
-            <span class="card-info-value">**** **** **** 1234</span>
+              <div class="total-price-value-container">
+                <strong class="total-price-value">{{ getTotalPrice() | currency:'BRL':'symbol':'1.2-2' }}</strong>
+                
+                @if(getIsCardPayment() && paymentCard != null){
+                  <sub>({{ orderDetails.installmentsNumber }}x de {{ getTotalPrice() / orderDetails.installmentsNumber | currency:'BRL':'symbol':'1.2-2' }})</sub>
+                }
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="details-section">
-    <p class="section-title">Endereço de entrega:</p>
 
-    <div class="info-surface address-details">
-      <mat-icon class="material-icons payment-icon">location_on</mat-icon>
-      <p>Rua Juvenal Santos, 123</p>
-    </div>
-  </div>
+        <div class="details-section">
+          <p class="section-title">Forma de pagamento:</p>
+
+          <div class="payment-method-card">
+            <div class="payment-method-description info-surface">
+              @if(paymentMethodDetails != null){
+                <div class="payment-method-header">
+                  <mat-icon class="material-icons">{{ paymentMethodDetails.icon }}</mat-icon>
+                  <p class="payment-method-card-text">{{ paymentMethodDetails.name }}</p>
+                </div>
+              }
+
+              @if(getIsCardPayment() && paymentCard != null){
+                <div class="payment-card-description">
+                  <div class="card-info">
+                    <p class="card-info-label">Nome:</p>
+                    <span class="card-info-value">{{ paymentCard.cardHolderName }}</span>
+                  </div>
+
+                  <div class="card-info">
+                    <p class="card-info-label">Cartão:</p>
+                    <span class="card-info-value">{{ paymentCard.cardNumber }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="details-section">
+          <p class="section-title">Endereço de entrega:</p>
+
+          <div class="info-surface address-details">
+            <mat-icon class="material-icons payment-icon">location_on</mat-icon>
+            <p>{{ getAddressDescription() }}</p>
+          </div>
+        </div>
+    }
+  }
 </div>

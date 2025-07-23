@@ -1,15 +1,25 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { CurrencyPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { NgxMaskPipe } from 'ngx-mask';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { PurchaseItemModel } from '../../models';
+import { AuthCredentialsModel, PaymentMethodModel } from '../../models';
 import { PurchaseItemCardComponent } from '../purchase-item-card';
+import { PaymentTypeEnum } from '../../shared/enums';
+import { PaymentCardModel } from '../../models/payment-card.model';
+import { Cart } from '../../shared/types';
+import { CartService, PaymentService } from '../../shared/services';
+import { AuthService } from '../../services';
 
-const fakeImages = [
-  'https://xelorwatches.com/wp-content/uploads/2023/09/PATEK-PHILIPPE-NAUTILUS-%E2%80%93-57111A-001-%E2%80%93-STEEL-40mm.png',
-  'https://th.bing.com/th/id/OIP.s-fAAGrOYb0g7m2pjyygawHaHa?cb=iwc2&rs=1&pid=ImgDetMain',
-];
 
 @Component({
   selector: 'order-confirmation',
@@ -18,37 +28,72 @@ const fakeImages = [
     CurrencyPipe,
     PurchaseItemCardComponent,
     MatButtonModule,
+    NgxMaskPipe,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './order-confirmation.component.html',
   styleUrl: './order-confirmation.component.scss',
 })
-export class OrderConfirmationComponent {
-  @Output("onConfirm") onConfirm = new EventEmitter<void>()
+export class OrderConfirmationComponent implements OnInit, OnChanges {
+  @Output('onConfirm') onConfirm = new EventEmitter<void>();
+  @Input('paymentType') paymentType: PaymentTypeEnum =
+    PaymentTypeEnum.CreditCard;
+  @Input('paymentCard') paymentCard: PaymentCardModel | null = null;
+  @Input('installmentsNumber') installmentsNumber: number = 1;
+  @Input('isLoading') isLoading: boolean = false;
 
-  purchaseItems: PurchaseItemModel[] = [
-    {
-      quantity: 1,
-      item: {
-        id: 1,
-        model: 'Rolex',
-        brand: 'Rolex',
-        price: 1000,
-        imagesUrls: fakeImages,
-      },
-    },
-    {
-      quantity: 1,
-      item: {
-        id: 2,
-        model: 'New Rolex',
-        brand: 'New Rolex',
-        price: 1000,
-        imagesUrls: [fakeImages[1]],
-      },
-    },
-  ];
+  authCredentials: AuthCredentialsModel | null = null;
 
-  confirmOrder(){
+  cart: Cart = { items: [] };
+  paymentMethod: PaymentMethodModel | null = null;
+
+  constructor(
+    private cartService: CartService,
+    private authService: AuthService,
+    private paymentService: PaymentService
+  ) {}
+
+  ngOnInit(): void {
+    this.subscribeCart();
+    this.subscribeToAuthCredentialsChange();
+  }
+
+  ngOnChanges(): void {
+    this.updatePaymentTypeInfo();
+  }
+
+  subscribeCart() {
+    this.cartService.getCart().subscribe((cart) => {
+      this.cart = cart;
+    });
+  }
+
+  subscribeToAuthCredentialsChange() {
+    this.authService.getAuthCredentials$().subscribe((credentials) => {
+      this.authCredentials = credentials;
+    });
+  }
+
+  confirmOrder() {
     this.onConfirm.emit();
+  }
+
+  updatePaymentTypeInfo() {
+    this.paymentMethod = this.paymentService.getPaymentMethod(this.paymentType);
+  }
+
+  getIsCardPayment() {
+    return (
+      this.paymentType === PaymentTypeEnum.CreditCard ||
+      this.paymentType === PaymentTypeEnum.DebitCard
+    );
+  }
+
+  getTotalPrice() {
+    return this.cartService.getTotalPrice();
+  }
+
+  getAuthCredentials(): AuthCredentialsModel | null {
+    return this.authService.getAuthCredentials();
   }
 }

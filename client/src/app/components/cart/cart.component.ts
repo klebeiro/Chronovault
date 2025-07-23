@@ -5,6 +5,7 @@ import { CartService } from '../../shared/services';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services';
 
 @Component({
   selector: 'app-cart',
@@ -15,7 +16,7 @@ import { Router } from '@angular/router';
 export class CartComponent implements OnInit{
   cart: Cart = { items: [] }
 
-  constructor(private cartService: CartService, private router: Router) {
+  constructor(private cartService: CartService, private router: Router, private authService: AuthService) {
 
   }
 
@@ -34,6 +35,11 @@ export class CartComponent implements OnInit{
   }
 
   goToCheckout() {
+    if(!this.authService.getIsAuthenticated()) {
+      this.router.navigate(['login']);
+      return;
+    }
+
     this.router.navigate(['checkout']);
   }
 }

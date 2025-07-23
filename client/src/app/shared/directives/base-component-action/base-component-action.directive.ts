@@ -20,6 +20,13 @@ export interface IActionWithInputAndOutput<Input, Output> {
   errorMessage: string;
 }
 
+export interface IActionWithoutInputWithOutput<Output> {
+  actionMethod: () => Observable<Output>;
+  onSucess: (output: Output) => void;
+  displayErrorNotification: boolean;
+  errorMessage: string;
+}
+
 @Directive({
   selector: '[baseComponentAction]',
 })
@@ -92,6 +99,8 @@ export class BaseComponentActionDirective {
         onSucess();
       },
       error: (error) => {
+        console.log('error: ', error);
+
         if (displayErrorNotification) {
           this.showErrorNotification({
             title: errorMessage,
@@ -109,4 +118,30 @@ export class BaseComponentActionDirective {
   executeActionWithResponse<Output>() {}
 
   executeActionWithoutResponse() {}
+
+  executeActionWithoutInputWithOutput<Output>(
+    params: IActionWithoutInputWithOutput<Output>
+  ) {
+    const { actionMethod, displayErrorNotification, errorMessage, onSucess } =
+      params;
+
+    this.isLoading = true;
+
+    actionMethod().subscribe({
+      next: (data) => {
+        this.isLoading = false;
+        onSucess(data);
+      },
+      error: (error) => {
+        if (displayErrorNotification) {
+          this.showErrorNotification({
+            title: errorMessage,
+            description: error.error,
+          });
+        }
+
+        this.isLoading = false;
+      },
+    });
+  }
 }
