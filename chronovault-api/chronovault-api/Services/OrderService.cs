@@ -2,7 +2,6 @@
 using chronovault_api.DTOs.Request;
 using chronovault_api.DTOs.Response;
 using chronovault_api.Models;
-using chronovault_api.Models.Enums;
 using chronovault_api.Models.ValueObjects;
 using chronovault_api.Repositories.Interfaces;
 using chronovault_api.Services.Interfaces;
@@ -12,13 +11,16 @@ namespace chronovault_api.Services
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
 
         public OrderService(
             IOrderRepository orderRepository,
+            IProductRepository productRepository,
             IMapper mapper)
         {
             _orderRepository = orderRepository;
+            _productRepository = productRepository;
             _mapper = mapper;
         }
 
@@ -38,6 +40,21 @@ namespace chronovault_api.Services
             var order = _mapper.Map<Order>(orderCreateDTO);
             order.UserId = userId;
             order.ShippingAddress = _mapper.Map<Address>(orderCreateDTO.ShippingAddress);
+    
+            var orderItemProductIds = order.OrderItems.Select(oi => oi.ProductId).ToList();
+
+            var productList = await _productRepository.GetAllProductsFromOrderItems(orderItemProductIds);
+
+            if(productList == null)
+            {
+                throw new Exception("Product list is empty");
+            }
+
+            foreach(var item in order.OrderItems)
+            {
+                item.Product = productList.FirstOrDefault(p => p.Id == item.ProductId);
+                item.Price = item.Product.Price; 
+            }
 
             order.TotalAmount = order.OrderItems.Sum(item => item.Price * item.Quantity);
 

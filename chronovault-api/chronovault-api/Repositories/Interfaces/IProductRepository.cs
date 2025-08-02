@@ -8,5 +8,6 @@ namespace chronovault_api.Repositories.Interfaces
         Task<Product?> GetByIdAsync(int id);
         Task<IEnumerable<Product>> GetAllAsync();
         Task<Product> CreateAsync(Product product);
+        Task<List<Product>> GetAllProductsFromOrderItems(List<int> productIds);
     }
 }

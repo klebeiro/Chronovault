@@ -41,7 +41,8 @@ namespace chronovault_api.Configuration
             CreateMap<OrderUpdateDTO, Order>();
         
             // OrderItem
-            CreateMap<OrderItem, OrderItemResponseDTO>();
+            CreateMap<OrderItem, OrderItemResponseDTO>()
+                .ForMember(dest => dest.ProductInformation, opt => opt.MapFrom(src => src.Product));
             CreateMap<OrderItemCreateDTO, OrderItem>();
             CreateMap<OrderItemUpdateDTO, OrderItem>();
 

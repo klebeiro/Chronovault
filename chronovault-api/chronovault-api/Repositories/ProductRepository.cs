@@ -33,5 +33,14 @@ namespace chronovault_api.Repositories
             await _context.SaveChangesAsync();
             return product;
         }
+
+        public async Task<List<Product>> GetAllProductsFromOrderItems(List<int> productIds)
+        {
+            var products = await _context.Products
+                .Where(p => productIds.Contains(p.Id))
+                .ToListAsync();
+
+            return products;
+        }
     }
 }
