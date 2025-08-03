@@ -12,7 +12,7 @@ namespace chronovault_api.Controllers
     /// Controller para gerenciar produtos.
     /// </summary>
     [ApiController]
-    [Authorize]
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [Produces("application/json")]
     public class ProductController : ControllerBase

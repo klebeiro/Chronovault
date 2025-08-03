@@ -1,24 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { CommonModule, NgIf } from '@angular/common';
-import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Cart } from '../../shared/types';
 
 import { CartService } from '../../shared/services';
-import { PurchaseItemCardComponent } from '../purchase-item-card';
 import { AuthService } from '../../services';
 
 @Component({
   selector: 'app-navbar',
-  imports: [
-    MatIconModule,
-    NgIf,
-    RouterModule,
-    PurchaseItemCardComponent,
-    MatSidenavModule,
-    CommonModule,
-  ],
+  imports: [MatIconModule, RouterModule, MatSidenavModule, CommonModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
@@ -51,18 +43,17 @@ export class NavbarComponent implements OnInit {
 
   addRouterChangeSubscription() {
     this.router.events.subscribe((event) => {
-      if(event instanceof NavigationEnd) {
+      if (event instanceof NavigationEnd) {
         this.checkActiveAction(event.url);
       }
     });
   }
 
   checkActiveAction(currentUrl: string = '') {
-    if(currentUrl.toLowerCase().includes('profile')) {
+    if (currentUrl.toLowerCase().includes('profile')) {
       this.showProfileButton = false;
-    } else{
-      
-      if(this.authService.getIsAuthenticated()) {
+    } else {
+      if (this.authService.getIsAuthenticated()) {
         this.showLogoutButton = true;
       } else {
         this.showLogoutButton = false;
@@ -76,9 +67,9 @@ export class NavbarComponent implements OnInit {
 
   addAuthCredentialsChangeSubscription() {
     this.authService.getAuthCredentials$().subscribe((credentials) => {
-      if(credentials === null){
+      if (credentials === null) {
         this.showLogoutButton = false;
-      } else{
+      } else {
         this.showLogoutButton = true;
       }
     });
@@ -90,7 +81,7 @@ export class NavbarComponent implements OnInit {
   }
 
   clickProfile() {
-    if(this.authService.getIsAuthenticated()) {
+    if (this.authService.getIsAuthenticated()) {
       this.router.navigate(['profile']);
       return;
     }

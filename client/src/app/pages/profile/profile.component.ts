@@ -31,6 +31,8 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.addRouteChangeListener();
+
+    this.selectedRoute = this.checkSelectedRoute(this.router.url);
   }
 
   addRouteChangeListener() {
@@ -52,6 +54,8 @@ export class ProfileComponent implements OnInit {
   }
 
   checkSelectedRoute(currentUrl: string) {
+    console.log(currentUrl);
+
     if (
       currentUrl.includes('my-orders') ||
       currentUrl.includes('order-details')

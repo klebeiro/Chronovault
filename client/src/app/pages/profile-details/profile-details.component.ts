@@ -10,9 +10,8 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatStep, MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule } from '@angular/material/stepper';
 import { RouterModule } from '@angular/router';
-import { AuthPageComponent } from '../../components';
 import { SharedModule } from '../../shared';
 import { StateModel } from '../../models';
 import { AuthService } from '../../services';
@@ -44,9 +43,7 @@ interface AddressForm {
     FormsModule,
     MatButtonModule,
     SharedModule,
-    AuthPageComponent,
     MatProgressSpinnerModule,
-    MatStep,
     MatStepperModule,
   ],
   templateUrl: './profile-details.component.html',
@@ -59,10 +56,7 @@ export class ProfileDetailsComponent {
 
   isLoading: boolean = false;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService
-  ) {}
+  constructor(private fb: FormBuilder, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.setUserInfoForm();
@@ -133,14 +127,14 @@ export class ProfileDetailsComponent {
     return mask.zipCode;
   }
 
-  subscribeToAuthCredentialsChange(){
+  subscribeToAuthCredentialsChange() {
     this.authService.getAuthCredentials$().subscribe((credentials) => {
       if (credentials) {
         console.log('credentials', credentials);
 
         this.userInfoForm.patchValue({
           name: credentials.user.name,
-          email: credentials.user.email
+          email: credentials.user.email,
         });
 
         this.addressForm.patchValue({
@@ -150,7 +144,7 @@ export class ProfileDetailsComponent {
           neighborhood: '',
           city: credentials.user.address.city,
           state: credentials.user.address.state,
-          complement: ''
+          complement: '',
         });
       }
     });

@@ -75,7 +75,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 
-// Registrar todos os repositórios
+// Registrar todos os repositï¿½rios
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserCredentialRepository, UserCredentialRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -85,7 +85,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:4200") 
+        policy.WithOrigins("*") 
               .AllowAnyHeader()
               .AllowAnyMethod();
     });

@@ -35,7 +35,6 @@ export class OrderService {
   }
 
   getOrderDetails(orderId: number): Observable<OrderDetailsModel> {
-    // simulates an http request
     const completeApiUrl = this.webServiceConfigService.getCompleteApiUrl(
       `Order/${orderId}/details`
     );
@@ -55,11 +54,11 @@ export class OrderService {
       installmentsNumber: apiOrderDTO.installmentCount,
       items: apiOrderDTO.orderItems.map((item) => ({
         item: {
-          brand: 'Rolex',
-          id: item.productId,
-          imagesUrls: [''],
-          model: 'Rolex',
-          price: item.price,
+          brand: item.productInformation.brand,
+          id: item.id,
+          imagesUrls: item.productInformation.images,
+          model: item.productInformation.model,
+          price: item.productInformation.price,
         },
         quantity: item.quantity,
       })),
@@ -68,7 +67,7 @@ export class OrderService {
       total: apiOrderDTO.totalAmount,
     };
 
-    if (apiOrderDTO.paymentMethod === PaymentTypeEnum.CreditCard) {
+    if (apiOrderDTO.paymentMethod === PaymentTypeEnum.CreditCard || apiOrderDTO.paymentMethod === PaymentTypeEnum.DebitCard) {
       order.paymentCard = {
         cardHolderName: apiOrderDTO.cardholderName,
         cardNumber: `**** **** **** ${apiOrderDTO.lastFourDigits}`,
@@ -108,10 +107,10 @@ export class OrderService {
 
       requestBody.creditCardInformation = {
         cardholderName: input.paymentCard.cardHolderName,
-        cardNumber: '1234 5678 9012 3456',
-        cvv: 123,
-        expiryMonth: 12,
-        expiryYear: 2023,
+        cardNumber: input.paymentCard.cardNumber,
+        cvv: input.paymentCard.cvCode,
+        expiryMonth: input.paymentCard.expirationMonth,
+        expiryYear: 2000 + input.paymentCard.expirationYear,
         installmentCount: input.installmentsNumber,
       };
     }
@@ -146,15 +145,17 @@ export class OrderService {
     const order: OrderModel = {
       id: apiOrderDTO.id,
       orderNumber: apiOrderDTO.orderNumber,
-      date: new Date(apiOrderDTO.createdDate),
+      date: new Date(apiOrderDTO.createdAt),
       items: apiOrderDTO.orderItems.map((item) => ({
-        id: item.productId,
+        id: item.id,
         quantity: item.quantity,
-        unitPrice: 2,
-        description: 'Watch',
+        unitPrice: item.price,
+        description: item.productInformation.model,
       })),
       total: apiOrderDTO.totalAmount,
     };
+
+    console.log(order);
 
     return order;
   }

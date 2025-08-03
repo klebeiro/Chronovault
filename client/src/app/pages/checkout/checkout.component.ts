@@ -142,9 +142,6 @@ export class CheckoutComponent
   finishOrder() {
     const authCredentials = this.authService.getAuthCredentials();
 
-    debugger;
-    console.log('authCredentials', authCredentials);
-
     if (!authCredentials) {
       this.showErrorNotification({
         title: 'Erro ao criar pedido',
@@ -203,9 +200,17 @@ export class CheckoutComponent
     });
 
     if (this.getIsCardPayment()) {
+      console.log('card payment', this.paymentCardForm.value);
+
+      const expirationDate = this.paymentCardForm.value.expirationDate ?? '';
+      const [month, year] = expirationDate.replace(' ', '').split('/');
+
       order.paymentCard = {
         cardHolderName: this.paymentCardForm.value.cardHolderName || '',
-        expirationDate: this.paymentCardForm.value.expirationDate || '',
+        expirationMonth: month ? parseInt(month) : 0,
+        expirationYear: year ? parseInt(year) : 0,
+        cardNumber: this.paymentCardForm.value.cardNumber || '',
+        cvCode: this.paymentCardForm.value.cvCode ? parseInt(this.paymentCardForm.value.cvCode) : 0,
       };
     }
 
