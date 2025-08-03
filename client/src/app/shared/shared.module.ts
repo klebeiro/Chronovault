@@ -11,12 +11,9 @@ import {
   AppInputComponent,
   AppLoadingIndicatorComponent,
   AppSelectComponent,
+  AppSnackBarComponent,
 } from './components';
-import {
-  BaseComponentActionDirective,
-  ClickStopPropagationDirective,
-} from './directives';
-import { CartService } from './services';
+import { ClickStopPropagationDirective } from './directives';
 
 @NgModule({
   imports: [
@@ -28,6 +25,7 @@ import { CartService } from './services';
     MatProgressSpinnerModule,
     ClickStopPropagationDirective,
     CommonModule,
+    AppSnackBarComponent,
   ],
   declarations: [
     AppInputComponent,

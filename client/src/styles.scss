@@ -38,3 +38,15 @@ html {
   @include mat.form-field-density($compact-theme);
 }
 
+// .notification-snackbar {
+//   background-color: red;
+//   padding: 100px;
+// }
+
+// Customize the entire app. Change :root to your selector if you want to scope the styles.
+// :root {
+//   @include mat.snack-bar-overrides((
+//     container-color: orange,
+//     supporting-text-color: red,
+//   ));
+// }

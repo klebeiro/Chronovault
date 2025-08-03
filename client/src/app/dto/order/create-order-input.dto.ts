@@ -16,8 +16,11 @@ export namespace CreateOrderInputDTO {
   }
 
   export interface PaymentCard {
-    expirationDate: string;
+    expirationYear: number;
+    expirationMonth: number;
     cardHolderName: string;
+    cvCode: number;
+    cardNumber: string;
   }
 
   export interface ShipppingAddress {

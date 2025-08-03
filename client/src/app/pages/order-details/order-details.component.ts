@@ -108,7 +108,7 @@ export class OrderDetailsComponent
     ) {
       this.paymentCard = {
         cardHolderName: orderDetails.paymentCard.cardHolderName,
-        cardNumber: orderDetails.paymentCard.cardHolderName,
+        cardNumber: orderDetails.paymentCard.cardNumber,
       };
     }
   }

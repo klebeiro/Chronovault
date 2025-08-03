@@ -34,7 +34,7 @@
           <div class="order-card-footer">
 
             <p class="order-total-price">
-              Total Final: <strong>{{ 100 | currency:'BRL':'symbol':'1.2-2' }}</strong>
+              Total Final: <strong>{{ order.total | currency:'BRL':'symbol':'1.2-2' }}</strong>
             </p>
 
             <button mat-button color="primary" (click)="goToOrderDetails(order.id)">Ver detalhes</button>

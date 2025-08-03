@@ -1,0 +1,9 @@
+<div class="content-container"
+  [ngClass]="{ 'success': getIsSuccess(), 'warning': getIsWarning(), 'error': getIsError() }">
+  <div class="content">
+    <p class="title">{{ data.title }}</p>
+    <p class="description">{{ data.description }}</p>
+  </div>
+
+  <mat-icon (click)="close()" class="icon">{{ iconName }}</mat-icon>
+</div>

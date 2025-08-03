@@ -24,7 +24,7 @@ namespace chronovault_api.Configuration
 
             // Order
             CreateMap<Order, OrderResponseDetailsDTO>();
-            CreateMap<Order, OrderResponseDTO>();
+            CreateMap<Order, OrderResponseDTO>().ForMember(dest => dest.OrderNumber, opt => opt.MapFrom(src => src.OrderNumber.ToString()));
             CreateMap<OrderCreateDTO, Order>()
                 .ForMember(dest => dest.ExpiryMonth, opt => opt.MapFrom(src =>
                 src.PaymentMethod == PaymentMethod.CreditCard ? src.CreditCardInformation.ExpiryMonth : null))

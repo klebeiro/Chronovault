@@ -6,3 +6,4 @@ export { StrapMaterialEnum } from './strap-material.enum';
 export { WatchCategoryEnum } from './watch-category.enum';
 export { WaterResistanceEnum } from './water-resistence.enum';
 export { PaymentTypeEnum } from './payment-type.enum';
+export { NotificationTypeEnum } from './notification-type.enum';

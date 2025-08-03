@@ -18,7 +18,11 @@ import { AuthPageComponent } from '../../components';
 import { SharedModule } from '../../shared/shared.module';
 
 import { AuthService } from '../../services';
-import { MatStep, MatStepper, MatStepperModule } from '@angular/material/stepper';
+import {
+  MatStep,
+  MatStepper,
+  MatStepperModule,
+} from '@angular/material/stepper';
 import { mask } from '../../shared/utils';
 import { StateModel } from '../../models';
 import { brazillianStates } from '../../shared/constants';
@@ -154,7 +158,7 @@ export class RegisterComponent
   }
 
   submitUserInfoForm() {
-    if(this.userInfoForm.valid && this.stepper) {
+    if (this.userInfoForm.valid && this.stepper) {
       this.stepper.next();
     }
   }
@@ -199,7 +203,7 @@ export class RegisterComponent
         this.showSuccessNotification({
           title: 'Cadastro realizado com sucesso',
           description: 'Faça login para continuar',
-        })
+        });
         this.router.navigate(['/login']);
       },
     });

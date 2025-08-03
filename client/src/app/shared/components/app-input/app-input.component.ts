@@ -34,6 +34,7 @@ export class AppInputComponent<T>
   @Input('mask') mask: string = '';
   @Input('prefix') prefix: string = '';
   @Input('readonly') readonly: boolean = false;
+  @Input('dropSpecialCharacters') dropSpecialCharacters: boolean = true;
 
   getHasError(): boolean {
     if (!this.control) {

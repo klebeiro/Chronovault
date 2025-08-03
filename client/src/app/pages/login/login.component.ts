@@ -18,7 +18,7 @@ import { AuthPageComponent } from '../../components';
 import { SharedModule } from '../../shared/shared.module';
 
 import { AuthService } from '../../services';
-import { CartService } from '../../shared/services';
+import { CartService, NotificationService } from '../../shared/services';
 import { LoginInputDTO, LoginOutputDTO } from '../../dto/auth';
 import { BaseComponentActionDirective } from '../../shared/directives';
 
@@ -99,8 +99,7 @@ export class LoginComponent
       errorMessage: 'Erro ao fazer login',
     });
   }
-
-
+  
   signIn(loginOutputDTO: LoginOutputDTO) {
     this.authService.setAuthCredentials({
       token: loginOutputDTO.token,

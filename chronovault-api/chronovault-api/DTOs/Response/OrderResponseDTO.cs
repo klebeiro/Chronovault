@@ -9,6 +9,7 @@ namespace chronovault_api.DTOs.Response
         public DateTime CreatedAt { get; set; }
         public decimal TotalAmount { get; set; }
         public OrderStatus Status { get; set; }
+        public string? OrderNumber { get; set; }
         public List<OrderItemResponseDTO> OrderItems { get; set; } = new List<OrderItemResponseDTO>();
     }
 }

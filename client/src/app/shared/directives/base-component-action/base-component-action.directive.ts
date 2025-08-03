@@ -3,6 +3,7 @@ import { Directive, inject } from '@angular/core';
 import { NotificationService, WebServiceConfigService } from '../../services';
 import { Notification } from '../../types';
 import { Observable } from 'rxjs';
+import { NotificationTypeEnum } from '../../enums';
 
 export interface IActionWithInput<Input> {
   input: Input;
@@ -37,14 +38,14 @@ export class BaseComponentActionDirective {
 
   constructor() {}
 
-  showSuccessNotification(notification: Notification) {
+  showSuccessNotification(notification: Omit<Notification, 'type'>) {
     this.notificationService.showSuccessNotification({
       title: notification.title,
       description: notification.description,
     });
   }
 
-  showErrorNotification(notification: Notification) {
+  showErrorNotification(notification: Omit<Notification, 'type'>) {
     this.notificationService.showErrorNotification({
       title: notification.title,
       description: notification.description,

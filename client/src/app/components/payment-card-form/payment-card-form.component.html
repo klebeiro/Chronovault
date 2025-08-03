@@ -8,7 +8,7 @@
 
   <div class="row">
     <app-input [formControl]="getFormControl('expirationDate')" [inputType]="'text'" [inputId]="'expirationDate'"
-      [inputPlaceholder]="'MM/AA'" [label]="'Data de expiração'" [mask]="getMask('expirationDate')" class="half-width">
+      [inputPlaceholder]="'MM/AA'" [dropSpecialCharacters]="false" [label]="'Data de expiração'" [mask]="getMask('expirationDate')" class="half-width">
     </app-input>
     <app-input [formControl]="getFormControl('cvCode')" [inputType]="'text'" [inputId]="'cvCode'"
       [inputPlaceholder]="'CVV'" [label]="'CVV'" [mask]="getMask('cvCode')" class="half-width">

@@ -25,6 +25,26 @@ export namespace ApiOrderDetailsOutputDTO {
     productId: number;
     quantity: number;
     price: number;
+    productInformation: ProductInformation;
+  }
+
+  export interface ProductInformation {
+    id: number;
+    model: string;
+    brand: string;
+    description: string;
+    price: number;
+    category: number;
+    gender: number;
+    movementType: number;
+    caseMaterial: number;
+    strapMaterial: number;
+    waterResistance: number;
+    stockQuantity: number;
+    isActive: boolean;
+    isFeatured: boolean;
+    isOnSale: boolean;
+    images: string[];
   }
 
   export interface ShippingAddress {
